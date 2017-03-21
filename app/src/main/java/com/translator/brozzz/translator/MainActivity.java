@@ -9,10 +9,14 @@ import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+
 public class MainActivity extends AppCompatActivity {
 
     private EditText mTranslateText;
     private TextView mTranslatedText;
+    Disposable mDisposableChangeText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,17 +24,25 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mTranslateText = (EditText) findViewById(R.id.translate_text);
         mTranslatedText = (TextView) findViewById(R.id.translated_text);
-        RxTextView
+        mDisposableChangeText = RxTextView
                 .textChanges(mTranslateText)
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .map(text -> text.toString().trim())
                 .filter(text -> text.length() != 0)
-                .subscribe((text) -> getTranslate(text));
-
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::getTranslate);
 
     }
 
-    private void getTranslate(String text){
+    private void getTranslate(String text) {
         mTranslatedText.setText(text);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (!mDisposableChangeText.isDisposed()){
+            mDisposableChangeText.dispose();
+        }
     }
 }
