@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/translate_form_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding = "8dp"
+        android:layout_marginBottom="10dp"
+        android:weightSum="4">
+        <EditText
+            android:id="@+id/translate_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="top|left"
+            android:background="@drawable/edittext_bg"
+            android:text="write your text here"/>
+        <TextView
+            android:id="@+id/translated_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="trastalated text"/>
+    </LinearLayout>
+
+</RelativeLayout>
