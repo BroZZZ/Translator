@@ -10,7 +10,6 @@
         app:tabGravity="fill"
         app:tabMode="fixed"
         android:layout_alignParentBottom="true"
-        style="@style/ActionBarTheme"
         android:background="@drawable/edittext_bg"/>
 
 </android.support.design.widget.AppBarLayout>

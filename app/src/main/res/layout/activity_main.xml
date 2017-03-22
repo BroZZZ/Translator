@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.translator.brozzz.translator.MainActivity">
+    tools:context="com.translator.brozzz.translator.activities.MainActivity">
 
     <include
         android:id="@+id/tab"

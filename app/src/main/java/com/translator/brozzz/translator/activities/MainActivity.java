@@ -1,32 +1,29 @@
-package com.translator.brozzz.translator;
+package com.translator.brozzz.translator.activities;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
-import com.translator.brozzz.translator.fragments.TranslateFragment;
+import com.translator.brozzz.translator.R;
+import com.translator.brozzz.translator.fragments.PagerFragment;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
+    @BindView(R.id.tabs) TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setCurrentFragment(new TranslateFragment(),false,"TranslateFragment");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
+        ButterKnife.bind(this);
+        if (savedInstanceState == null) {
+            setCurrentFragment(new PagerFragment(), false, null);
+        }
     }
 
     public void setCurrentFragment(Fragment fragment, boolean addToBackStack, String name) {
@@ -42,4 +39,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public TabLayout getTabLayout() {
+        return tabLayout;
+    }
 }
