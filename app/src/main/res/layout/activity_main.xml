@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/tab"
-        android:layout_above="@id/bottom_tablayout"/>
+        android:layout_above="@+id/bottom_tablayout"/>
 
     <include
         android:id="@+id/bottom_tablayout"
