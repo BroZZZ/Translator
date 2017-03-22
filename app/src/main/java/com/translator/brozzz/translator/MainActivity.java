@@ -6,11 +6,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.widget.RxTextView;
+import com.translator.brozzz.translator.model.Translation;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,17 +34,30 @@ public class MainActivity extends AppCompatActivity {
                 .filter(text -> text.length() != 0)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::getTranslate);
-
     }
 
-    private void getTranslate(String text) {
-        mTranslatedText.setText(text);
+
+
+    private String getTranslate(String text) {
+        try {
+        Response<Translation> translation =
+            YaTranslator.getApi().getTranslation(
+                    "trnsl.1.1.20170321T091507Z.5d4a62eb8c8c758d.19a4223d1dc1019da69006bc80e17685d394c534",
+                    text,
+                    "ru-en",
+                    "plain")
+                    .execute();
+            return translation.body().getTranslation().get(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (!mDisposableChangeText.isDisposed()){
+        if (!mDisposableChangeText.isDisposed()) {
             mDisposableChangeText.dispose();
         }
     }
