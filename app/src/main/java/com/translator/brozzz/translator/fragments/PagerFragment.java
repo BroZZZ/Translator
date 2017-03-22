@@ -55,6 +55,7 @@ public class PagerFragment extends Fragment implements TabLayout.OnTabSelectedLi
         if (pagerAdapter == null) {
             pagerAdapter = new PagerAdapter(getChildFragmentManager());
             pagerAdapter.addFragment(new TranslateFragment());
+            pagerAdapter.addFragment(new SettingFragment());
         }
         viewPager.setAdapter(pagerAdapter);
     }
@@ -81,11 +82,13 @@ public class PagerFragment extends Fragment implements TabLayout.OnTabSelectedLi
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_translate_white_24dp);
         tabLayout.getTabAt(0).getIcon().mutate()
                 .setColorFilter(ResourcesCompat.getColor(getResources(),
-                        R.color.gray, getContext().getTheme()),
+                        R.color.colorSelectedTab, getContext().getTheme()),
                         PorterDuff.Mode.MULTIPLY);
-//        tabLayout.getTabAt(1).setIcon(R.drawable.ic_grade_white_24dp);
-//        tabLayout.getTabAt(1).getIcon().mutate()
-//                .setColorFilter(getResources().getColor(android.R.color.black), PorterDuff.Mode.MULTIPLY);
+
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_settings_white_24dp);
+        tabLayout.getTabAt(1).getIcon().mutate()
+                .setColorFilter(getResources().getColor(R.color.colorUnselectedTab), PorterDuff.Mode.MULTIPLY);
+
         tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorAccent));
         tabLayout.addOnTabSelectedListener(this);
     }
@@ -96,7 +99,7 @@ public class PagerFragment extends Fragment implements TabLayout.OnTabSelectedLi
             if (tab != null && tab.getIcon() != null) {
                 tab.getIcon().mutate()
                         .setColorFilter(ResourcesCompat.getColor(getResources(),
-                                R.color.colorAccent, getContext().getTheme()),
+                                R.color.colorSelectedTab, getContext().getTheme()),
                                 PorterDuff.Mode.MULTIPLY);
 
 //                String tabName = getTabTitle(tab);
@@ -107,11 +110,10 @@ public class PagerFragment extends Fragment implements TabLayout.OnTabSelectedLi
 
     @Override
     public void onTabUnselected(TabLayout.Tab tab) {
-//        if (tab != null && tab.getIcon() != null) {
-//            tab.getIcon().mutate()
-//                    .setColorFilter(Color.BLACK,
-//                            PorterDuff.Mode.MULTIPLY);
-//        }
+        if (tab != null && tab.getIcon() != null) {
+            tab.getIcon().mutate()
+                    .setColorFilter(getResources().getColor(R.color.colorUnselectedTab), PorterDuff.Mode.MULTIPLY);
+        }
     }
 
     @Override
