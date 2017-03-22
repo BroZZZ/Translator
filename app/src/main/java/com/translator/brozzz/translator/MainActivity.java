@@ -7,19 +7,20 @@ import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.translator.brozzz.translator.model.Translation;
+import com.translator.brozzz.translator.utils.Utils;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import retrofit2.Response;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
     private EditText mTranslateText;
     private TextView mTranslatedText;
     Disposable mDisposableChangeText;
+    Disposable mDisposableTranslater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +28,26 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mTranslateText = (EditText) findViewById(R.id.translate_text);
         mTranslatedText = (TextView) findViewById(R.id.translated_text);
+    }
+
+    private void setTranslatedText(Translation translation){
+        mTranslatedText.setText(translation.getTranslation().get(0));
+    }
+
+    private void getTranslate(String text) {
+        mDisposableTranslater = YaTranslator.getApi().getTranslation
+                (Utils.Constant.YandexApi.TRANSLATOR_API_KEY,
+                text,
+                Utils.getTranslateLang(),
+                Utils.Constant.YandexApi.TRANSLATOR_API_FORMAT)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::setTranslatedText);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         mDisposableChangeText = RxTextView
                 .textChanges(mTranslateText)
                 .debounce(500, TimeUnit.MILLISECONDS)
@@ -36,29 +57,14 @@ public class MainActivity extends AppCompatActivity {
                 .subscribe(this::getTranslate);
     }
 
-
-
-    private String getTranslate(String text) {
-        try {
-        Response<Translation> translation =
-            YaTranslator.getApi().getTranslation(
-                    "trnsl.1.1.20170321T091507Z.5d4a62eb8c8c758d.19a4223d1dc1019da69006bc80e17685d394c534",
-                    text,
-                    "ru-en",
-                    "plain")
-                    .execute();
-            return translation.body().getTranslation().get(0);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
         if (!mDisposableChangeText.isDisposed()) {
             mDisposableChangeText.dispose();
+        }
+        if (!mDisposableTranslater.isDisposed()) {
+            mDisposableTranslater.dispose();
         }
     }
 }
