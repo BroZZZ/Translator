@@ -2,6 +2,7 @@ package com.translator.brozzz.translator.fragments;
 
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -22,38 +23,14 @@ import butterknife.ButterKnife;
 
 public class PagerFragment extends Fragment implements TabLayout.OnTabSelectedListener {
 
-    @BindView(R.id.view_pager)  ViewPager viewPager;
-
-
+    @BindView(R.id.view_pager)
+    ViewPager viewPager;
     PagerAdapter pagerAdapter;
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        int selectedTabIndex = ((MainActivity) getActivity()).getTabLayout()
-                .getSelectedTabPosition();
-
-//        switch (selectedTabIndex) {
-//            case 0:
-//                ((MainActivity) getActivity()).getToolBar().setTitle(getString(R.string.genres_title));
-//                break;
-//            case 1:
-//                ((MainActivity) getActivity()).getToolBar().setTitle(getString(R.string.popular_title));
-//                break;
-//            case 2:
-//                ((MainActivity) getActivity()).getToolBar().setTitle(getString(R.string.latest_title));
-//                break;
-//            case 3:
-//                ((MainActivity) getActivity()).getToolBar().setTitle(getString(R.string.my_music_title));
-//                break;
-//            default:
-//                break;
-//        }
-    }
 
     private void initViewPager() {
         if (pagerAdapter == null) {
             pagerAdapter = new PagerAdapter(getChildFragmentManager());
+            pagerAdapter.addFragment(new HistoryFragment());
             pagerAdapter.addFragment(new TranslateFragment());
             pagerAdapter.addFragment(new SettingFragment());
         }
@@ -76,21 +53,25 @@ public class PagerFragment extends Fragment implements TabLayout.OnTabSelectedLi
         return view;
     }
 
-    @SuppressWarnings({"ConstantConditions", "deprecation"})
     private void initTabBar(@NotNull TabLayout tabLayout) {
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_translate_white_24dp);
-        tabLayout.getTabAt(0).getIcon().mutate()
-                .setColorFilter(ResourcesCompat.getColor(getResources(),
-                        R.color.colorSelectedTab, getContext().getTheme()),
-                        PorterDuff.Mode.MULTIPLY);
-
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_settings_white_24dp);
-        tabLayout.getTabAt(1).getIcon().mutate()
-                .setColorFilter(getResources().getColor(R.color.colorUnselectedTab), PorterDuff.Mode.MULTIPLY);
-
-        tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorAccent));
         tabLayout.addOnTabSelectedListener(this);
+
+        setTabIconParams(tabLayout, 0, R.drawable.ic_bookmark_white_24dp);
+        setTabIconParams(tabLayout, 1, R.drawable.ic_translate_white_24dp);
+        setTabIconParams(tabLayout, 2, R.drawable.ic_settings_white_24dp);
+
+        viewPager.setCurrentItem(1);
+    }
+
+    @SuppressWarnings({"ConstantConditions", "deprecation"})
+    private void setTabIconParams(@NotNull TabLayout tabLayout, int tabIndex, @DrawableRes int iconId) {
+        tabLayout.getTabAt(tabIndex).setIcon(iconId);
+
+        tabLayout.getTabAt(tabIndex).getIcon().mutate()
+                .setColorFilter(ResourcesCompat.getColor(getResources(),
+                        R.color.colorUnselectedTab, getContext().getTheme()),
+                        PorterDuff.Mode.MULTIPLY);
     }
 
     @Override
@@ -101,9 +82,6 @@ public class PagerFragment extends Fragment implements TabLayout.OnTabSelectedLi
                         .setColorFilter(ResourcesCompat.getColor(getResources(),
                                 R.color.colorSelectedTab, getContext().getTheme()),
                                 PorterDuff.Mode.MULTIPLY);
-
-//                String tabName = getTabTitle(tab);
-//                ((MainActivity) getActivity()).getToolBar().setTitle(tabName);
             }
         }
     }
@@ -112,7 +90,9 @@ public class PagerFragment extends Fragment implements TabLayout.OnTabSelectedLi
     public void onTabUnselected(TabLayout.Tab tab) {
         if (tab != null && tab.getIcon() != null) {
             tab.getIcon().mutate()
-                    .setColorFilter(getResources().getColor(R.color.colorUnselectedTab), PorterDuff.Mode.MULTIPLY);
+                    .setColorFilter(ResourcesCompat.getColor(getResources(),
+                            R.color.colorUnselectedTab, getContext().getTheme()),
+                            PorterDuff.Mode.MULTIPLY);
         }
     }
 
