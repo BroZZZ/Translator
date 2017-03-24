@@ -11,9 +11,8 @@ import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.translator.brozzz.translator.R;
-import com.translator.brozzz.translator.YaTranslator;
-import com.translator.brozzz.translator.model.Translation;
-import com.translator.brozzz.translator.utils.Utils;
+import com.translator.brozzz.translator.interfaces.ITranslateFragment;
+import com.translator.brozzz.translator.presenter.TranslatePresenter;
 
 import java.util.concurrent.TimeUnit;
 
@@ -21,11 +20,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
-public class TranslateFragment extends Fragment {
-    Disposable mDisposableChangeText;
-    Disposable mDisposableTranslater;
+public class TranslateFragment extends Fragment implements ITranslateFragment {
 
     @BindView(R.id.translate_text)
     EditText mTranslateText;
@@ -33,9 +29,13 @@ public class TranslateFragment extends Fragment {
     @BindView(R.id.translated_text)
     TextView mTranslatedText;
 
+    Disposable mDisposableChangeText;
+    private TranslatePresenter mPresenter;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPresenter = new TranslatePresenter(this);
     }
 
     @Nullable
@@ -54,35 +54,25 @@ public class TranslateFragment extends Fragment {
                 .textChanges(mTranslateText)
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .map(text -> text.toString().trim())
-                .filter(text -> text.length() != 0)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::getTranslate);
+                .subscribe(mPresenter::translate);
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (!mDisposableChangeText.isDisposed()) {
-            mDisposableChangeText.dispose();
-        }
-        if (!mDisposableTranslater.isDisposed()) {
-            mDisposableTranslater.dispose();
-        }
 
     }
 
-    private void setTranslatedText(Translation translation) {
-        mTranslatedText.setText(translation.getTranslation().get(0));
+    @Override
+    public void onStop() {
+        super.onStop();
+        mPresenter.dispose();
     }
 
-    private void getTranslate(String text) {
-        mDisposableTranslater = YaTranslator.getApi().getTranslation
-                (Utils.Constant.YandexApi.TRANSLATOR_API_KEY,
-                        text,
-                        Utils.getTranslateLang(),
-                        Utils.Constant.YandexApi.TRANSLATOR_API_FORMAT)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::setTranslatedText);
+    @Override
+    public void setTranslatedText(String text) {
+        mTranslatedText.setText(text);
     }
 }

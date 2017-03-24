@@ -1,4 +1,4 @@
-package com.translator.brozzz.translator.model;
+package com.translator.brozzz.translator.entity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
