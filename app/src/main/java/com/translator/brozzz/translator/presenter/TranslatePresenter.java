@@ -29,7 +29,7 @@ public class TranslatePresenter {
             mDisposableTranslater = mTranslaterApi
                     .getTranslation(Yandex.TranslateApi.TRANSLATOR_API_KEY,
                             text,
-                            getTranslationLang())
+                            getTranslationFormat())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(translation -> mView.setTranslatedText(translation.getTranslation().toString()));
@@ -41,11 +41,15 @@ public class TranslatePresenter {
             mDisposableTranslater.dispose();
     }
 
-    private String getTranslationLang(){
-        return "en-ru";
-        //TODO использовать когда будут языки
-//        return mModel.getTranslateFrom() + "-" +
-//                mModel.getTranslateTo();
+    private String getTranslationFormat(){
+        return mModel.getTranslateFrom().getCode() + "-" +
+               mModel.getTranslateTo().getCode();
+    }
+
+    public void switchLang(){
+        mModel.switchLang();
+        mView.updateActionBar(mModel.getTranslateFrom().getName(),
+                mModel.getTranslateTo().getName());
     }
 
 }

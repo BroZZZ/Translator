@@ -3,14 +3,17 @@ package com.translator.brozzz.translator.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.translator.brozzz.translator.R;
+import com.translator.brozzz.translator.activities.MainActivity;
 import com.translator.brozzz.translator.interfaces.ITranslateFragment;
 import com.translator.brozzz.translator.presenter.TranslatePresenter;
 
@@ -29,6 +32,11 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
     @BindView(R.id.translated_text)
     TextView mTranslatedText;
 
+    TextView tvTranslateFrom;
+    TextView tvTranslateTo;
+    ImageButton btnSwitchLang;
+
+
     Disposable mDisposableChangeText;
     private TranslatePresenter mPresenter;
 
@@ -43,8 +51,28 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.translate_fragment, container, false);
         ButterKnife.bind(this, view);
+        initSupportActionBarView();
+        setListeners();
         return view;
+    }
 
+    private void initSupportActionBarView(){
+        ActionBar actionBar = ((MainActivity)getActivity()).getSupportActionBar();
+        if (actionBar != null){
+            actionBar.setCustomView(R.layout.translate_action_bar);
+            tvTranslateFrom = (TextView)actionBar.getCustomView()
+                    .findViewById(R.id.translate_from);
+            tvTranslateFrom.setText("Английский");
+            tvTranslateTo = (TextView)actionBar.getCustomView()
+                    .findViewById(R.id.translate_to);
+            tvTranslateTo.setText("Русский");
+            btnSwitchLang = (ImageButton) actionBar.getCustomView()
+                    .findViewById(R.id.btn_switch_lang);
+        }
+    }
+
+    private void setListeners(){
+        btnSwitchLang.setOnClickListener(view -> mPresenter.switchLang());
     }
 
     @Override
@@ -74,5 +102,10 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
     @Override
     public void setTranslatedText(String text) {
         mTranslatedText.setText(text);
+    }
+
+    public void updateActionBar(String translateFrom, String translateTo){
+        tvTranslateFrom.setText(translateFrom);
+        tvTranslateTo.setText(translateTo);
     }
 }

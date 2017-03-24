@@ -4,4 +4,6 @@ public interface ITranslateFragment {
 
     void setTranslatedText(String text);
 
+    void updateActionBar(String translateFrom, String translateTo);
+
 }

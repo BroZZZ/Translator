@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.translator.brozzz.translator.R;
-import com.translator.brozzz.translator.activities.MainActivity;
 import com.translator.brozzz.translator.adapters.PagerAdapter;
 
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +25,8 @@ public class PagerFragment extends Fragment implements TabLayout.OnTabSelectedLi
     @BindView(R.id.view_pager)
     ViewPager viewPager;
     PagerAdapter pagerAdapter;
+    private TabLayout mTabLayout;
+
 
     private void initViewPager() {
         if (pagerAdapter == null) {
@@ -49,17 +50,18 @@ public class PagerFragment extends Fragment implements TabLayout.OnTabSelectedLi
         View view = inflater.inflate(R.layout.fragment_pager, container, false);
         ButterKnife.bind(this, view);
         initViewPager();
-        initTabBar(((MainActivity) getActivity()).getTabLayout());
+        initTabBar();
         return view;
     }
 
-    private void initTabBar(@NotNull TabLayout tabLayout) {
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.addOnTabSelectedListener(this);
+    private void initTabBar() {
+        mTabLayout = (TabLayout) getActivity().findViewById(R.id.tabs);
+        mTabLayout.setupWithViewPager(viewPager);
+        mTabLayout.addOnTabSelectedListener(this);
 
-        setTabIconParams(tabLayout, 0, R.drawable.ic_bookmark_white_24dp);
-        setTabIconParams(tabLayout, 1, R.drawable.ic_translate_white_24dp);
-        setTabIconParams(tabLayout, 2, R.drawable.ic_settings_white_24dp);
+        setTabIconParams(mTabLayout, 0, R.drawable.ic_bookmark_white_24dp);
+        setTabIconParams(mTabLayout, 1, R.drawable.ic_translate_white_24dp);
+        setTabIconParams(mTabLayout, 2, R.drawable.ic_settings_white_24dp);
 
         viewPager.setCurrentItem(1);
     }

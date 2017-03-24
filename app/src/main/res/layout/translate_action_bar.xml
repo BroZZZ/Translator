@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?android:attr/actionBarSize"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    android:background="@color/colorPrimary"
+    android:orientation="horizontal">
+
+
+    <TextView
+        android:id="@+id/translate_from"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:textAlignment="center"/>
+
+    <ImageButton
+        android:id="@+id/btn_switch_lang"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:clickable="true"
+        android:background="@null"
+        android:src="@drawable/ic_swap_horiz_black_24dp" />
+
+    <TextView
+        android:id="@+id/translate_to"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:textAlignment="center"/>
+
+</LinearLayout>

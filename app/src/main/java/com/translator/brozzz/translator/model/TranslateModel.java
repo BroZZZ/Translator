@@ -1,21 +1,36 @@
 package com.translator.brozzz.translator.model;
 
+import com.translator.brozzz.translator.entity.Language;
+
 public class TranslateModel {
 
-    private String translateFrom;
-    private String translateTo;
+    private Language translateFrom;
+    private Language translateTo;
 
-    public void changeLanguage(){
-        String tmp = translateFrom;
-        translateTo = translateFrom;
-        translateFrom = tmp;
+    public TranslateModel() {
+        this.translateFrom = new Language("en", "Английский");
+        this.translateTo = new Language("ru", "Русский");
     }
 
-    public String getTranslateFrom() {
+    public void switchLang(){
+        Language tmp = translateFrom;
+        translateFrom = translateTo;
+        translateTo = tmp;
+    }
+
+    public Language getTranslateFrom() {
         return translateFrom;
     }
 
-    public String getTranslateTo() {
+    public Language getTranslateTo() {
         return translateTo;
+    }
+
+    public void setTranslateFrom(Language translateFrom) {
+        this.translateFrom = translateFrom;
+    }
+
+    public void setTranslateTo(Language translateTo) {
+        this.translateTo = translateTo;
     }
 }
