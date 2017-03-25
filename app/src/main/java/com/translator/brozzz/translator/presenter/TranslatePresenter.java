@@ -2,6 +2,7 @@ package com.translator.brozzz.translator.presenter;
 
 import android.util.Log;
 
+import com.translator.brozzz.translator.adapters.DictionaryRvAdapter;
 import com.translator.brozzz.translator.entity.dictionary.Dictionary;
 import com.translator.brozzz.translator.interfaces.ITranslateFragment;
 import com.translator.brozzz.translator.interfaces.YandexDictionaryApi;
@@ -19,12 +20,14 @@ public class TranslatePresenter {
     private YandexDictionaryApi mDictionaryApi = Yandex.DictionaryApi.getDictionaryApi();
     private ITranslateFragment mView;
     private TranslateModel mModel;
+    private DictionaryRvAdapter mRvDictionaryAdapter;
 
     Disposable mDisposableTranslater;
 
     public TranslatePresenter(ITranslateFragment mView) {
         this.mView = mView;
         mModel = new TranslateModel();
+        mRvDictionaryAdapter = new DictionaryRvAdapter(null);
     }
 
     public void translate(String text) {
@@ -50,7 +53,11 @@ public class TranslatePresenter {
     }
 
     private void processDictionary(Dictionary dictionary) {
-        Log.d("DICTIONARY TEST", dictionary.getSynonyms(0,0));
+        mRvDictionaryAdapter.setDictionary(dictionary);
+    }
+
+    public DictionaryRvAdapter getmRvDictionaryAdapter() {
+        return mRvDictionaryAdapter;
     }
 
     private void processDictionary(Throwable ex) {

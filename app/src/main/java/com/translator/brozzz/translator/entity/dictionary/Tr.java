@@ -6,6 +6,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import static com.translator.brozzz.translator.entity.dictionary.Dictionary.WORD_SEPARATOR;
+
 public class Tr {
 
     @SerializedName("text")
@@ -19,7 +21,7 @@ public class Tr {
     private List<Syn> syn = null;
     @SerializedName("mean")
     @Expose
-    private List<Mean> mean = null;
+    private List<Mean> means = null;
 
     public String getText() {
         return text;
@@ -33,8 +35,20 @@ public class Tr {
         return syn;
     }
 
-    public List<Mean> getMean() {
-        return mean;
+    public List<Mean> getMeans() {
+        return means;
     }
 
+    public String getMeansString() {
+        if (means == null)
+            return "";
+
+        StringBuilder sbMeans = new StringBuilder("(");
+        for (Mean mean : means) {
+            sbMeans.append(mean.getText() + Dictionary.WORD_SEPARATOR);
+        }
+        sbMeans.delete(sbMeans.length() - WORD_SEPARATOR.length(), sbMeans.length());
+        sbMeans.append(")");
+        return sbMeans.toString();
+    }
 }

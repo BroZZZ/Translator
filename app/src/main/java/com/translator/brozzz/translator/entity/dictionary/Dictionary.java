@@ -7,7 +7,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class Dictionary {
-    private static final String WORD_SEPARATOR = ", ";
+    //TODO нужно придумать куда это дело перенести
+    public static final String WORD_SEPARATOR = ", ";
     @SerializedName("def")
     @Expose
     private List<Def> def = null;
@@ -29,8 +30,8 @@ public class Dictionary {
             for (Syn syn : tr.getSyn()) {
                 sbSynonym.append(syn.getText() + WORD_SEPARATOR);
             }
+            sbSynonym.delete(sbSynonym.length() - WORD_SEPARATOR.length(),sbSynonym.length());
         }
-        sbSynonym.delete(sbSynonym.length() - WORD_SEPARATOR.length(),sbSynonym.length());
         return sbSynonym.toString();
     }
 }
