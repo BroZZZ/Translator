@@ -19,15 +19,8 @@ public class Translation {
         return translation;
     }
 
-    public void setTranslation(ArrayList<String> translation) {
-        this.translation = translation;
-    }
-
     public String getLang() {
         return lang;
     }
 
-    public void setLang(String lang) {
-        this.lang = lang;
-    }
 }
