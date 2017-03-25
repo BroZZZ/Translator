@@ -34,8 +34,7 @@ public class Yandex {
     public static class DictionaryApi{
         public static final String DICTIONARY_API_KEY = "dict.1.1.20170324T224309Z.9d5c946c31cb8396.e6ba9f50d45dcf44367faf8081bf71ef8b802a94";
         private static final String DICTIONARY_API_BASE_URL = "https://dictionary.yandex.net/";
-        private static Gson gson = new GsonBuilder()
-                .create();
+
         private static YandexDictionaryApi yandexDictionaryApi = new Retrofit.Builder()
                 .baseUrl(DictionaryApi.DICTIONARY_API_BASE_URL) //Базовая часть адреса
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

@@ -3,17 +3,18 @@
     android:id="@+id/translate_form_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="10dp"
+    android:layout_marginBottom="5dp"
     android:background="@android:color/white"
     android:padding="8dp">
 
     <EditText
         android:id="@+id/translate_text"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="120dp"
         android:background="@drawable/edittext_bg"
-        android:gravity="top|left"
-        android:text="write your text here" />
+        android:gravity="top|start"
+        android:text="write your text here"
+        android:inputType="textMultiLine" />
 
     <RelativeLayout
         android:id="@+id/translate_result_container"
@@ -21,8 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/translate_text"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="5dp"
-        android:layout_weight="1">
+        android:layout_marginStart="5dp">
 
         <TextView
             android:id="@+id/translated_text"

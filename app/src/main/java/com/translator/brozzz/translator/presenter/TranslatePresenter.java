@@ -32,7 +32,7 @@ public class TranslatePresenter {
 
     public void translate(String text) {
         if (text.length() == 0) {
-            mView.setTranslatedText(text);
+            mView.displayTranslateResult(text, text);
         } else {
             mDisposableTranslater = mTranslaterApi
                     .getTranslation(Yandex.TranslateApi.TRANSLATOR_API_KEY,
@@ -40,7 +40,7 @@ public class TranslatePresenter {
                             getTranslationFormat())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(translation -> mView.setTranslatedText(translation.getTranslation().toString()));
+                    .subscribe(translation -> mView.displayTranslateResult(text, translation.getTranslationString()));
 
             mDisposableTranslater = mDictionaryApi
                     .getDictionary(Yandex.DictionaryApi.DICTIONARY_API_KEY,

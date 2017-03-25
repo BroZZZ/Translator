@@ -6,9 +6,10 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import static com.translator.brozzz.translator.utils.Utils.Constant.WORD_SEPARATOR;
+
 public class Dictionary {
     //TODO нужно придумать куда это дело перенести
-    public static final String WORD_SEPARATOR = ", ";
     @SerializedName("def")
     @Expose
     private List<Def> def = null;

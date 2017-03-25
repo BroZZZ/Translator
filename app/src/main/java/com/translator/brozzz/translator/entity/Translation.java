@@ -23,4 +23,12 @@ public class Translation {
         return lang;
     }
 
+    public String getTranslationString(){
+        String arrayString = translation.toString();
+        arrayString = arrayString.replace("[","");
+        arrayString = arrayString.replace("]","");
+        return arrayString;
+    }
+
+
 }

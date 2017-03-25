@@ -35,6 +35,9 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
     @BindView(R.id.translated_text)
     TextView mTranslatedText;
 
+    @BindView(R.id.original_text)
+    TextView mOriginalText;
+
     @BindView(R.id.dictionary_rv)
     RecyclerView dictionaryRv;
 
@@ -65,20 +68,20 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
         return view;
     }
 
-    private void initRv(){
+    private void initRv() {
         dictionaryRv.setAdapter(mPresenter.getmRvDictionaryAdapter());
         dictionaryRv.setItemAnimator(new DefaultItemAnimator());
         dictionaryRv.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    private void initSupportActionBarView(){
-        ActionBar actionBar = ((MainActivity)getActivity()).getSupportActionBar();
-        if (actionBar != null){
+    private void initSupportActionBarView() {
+        ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
             actionBar.setCustomView(R.layout.translate_action_bar);
-            tvTranslateFrom = (TextView)actionBar.getCustomView()
+            tvTranslateFrom = (TextView) actionBar.getCustomView()
                     .findViewById(R.id.translate_from);
             tvTranslateFrom.setText("Английский");
-            tvTranslateTo = (TextView)actionBar.getCustomView()
+            tvTranslateTo = (TextView) actionBar.getCustomView()
                     .findViewById(R.id.translate_to);
             tvTranslateTo.setText("Русский");
             btnSwitchLang = (ImageButton) actionBar.getCustomView()
@@ -86,7 +89,7 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
         }
     }
 
-    private void setListeners(){
+    private void setListeners() {
         btnSwitchLang.setOnClickListener(view -> mPresenter.switchLang());
     }
 
@@ -115,11 +118,12 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
     }
 
     @Override
-    public void setTranslatedText(String text) {
-        mTranslatedText.setText(text);
+    public void displayTranslateResult(String originalText, String translatedText) {
+        mTranslatedText.setText(translatedText);
+        mOriginalText.setText(originalText);
     }
 
-    public void updateActionBar(String translateFrom, String translateTo){
+    public void updateActionBar(String translateFrom, String translateTo) {
         tvTranslateFrom.setText(translateFrom);
         tvTranslateTo.setText(translateTo);
     }
