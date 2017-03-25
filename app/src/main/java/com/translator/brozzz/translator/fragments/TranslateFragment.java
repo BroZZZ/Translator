@@ -51,7 +51,7 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPresenter = new TranslatePresenter(this);
+        mPresenter = new TranslatePresenter(getContext(), this);
     }
 
     @Nullable
@@ -83,9 +83,10 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
             tvTranslateFrom.setText("Английский");
             tvTranslateTo = (TextView) actionBar.getCustomView()
                     .findViewById(R.id.translate_to);
-            tvTranslateTo.setText("Русский");
             btnSwitchLang = (ImageButton) actionBar.getCustomView()
                     .findViewById(R.id.btn_switch_lang);
+
+            updateActionBar();
         }
     }
 
@@ -114,7 +115,7 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
     @Override
     public void onStop() {
         super.onStop();
-        mPresenter.dispose();
+        mPresenter.dismiss();
     }
 
     @Override
@@ -123,8 +124,8 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
         mOriginalText.setText(originalText);
     }
 
-    public void updateActionBar(String translateFrom, String translateTo) {
-        tvTranslateFrom.setText(translateFrom);
-        tvTranslateTo.setText(translateTo);
+    public void updateActionBar() {
+        tvTranslateFrom.setText(mPresenter.getTranslateFromName());
+        tvTranslateTo.setText(mPresenter.getTranslateToName());
     }
 }

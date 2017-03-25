@@ -3,10 +3,9 @@ package com.translator.brozzz.translator.entity.dictionary;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.translator.brozzz.translator.utils.Utils;
 
 import java.util.List;
-
-import static com.translator.brozzz.translator.entity.dictionary.Dictionary.WORD_SEPARATOR;
 
 public class Tr {
 
@@ -45,9 +44,9 @@ public class Tr {
 
         StringBuilder sbMeans = new StringBuilder("(");
         for (Mean mean : means) {
-            sbMeans.append(mean.getText() + Dictionary.WORD_SEPARATOR);
+            sbMeans.append(mean.getText() + Utils.Constant.WORD_SEPARATOR);
         }
-        sbMeans.delete(sbMeans.length() - WORD_SEPARATOR.length(), sbMeans.length());
+        sbMeans.delete(sbMeans.length() - Utils.Constant.WORD_SEPARATOR.length(), sbMeans.length());
         sbMeans.append(")");
         return sbMeans.toString();
     }

@@ -11,5 +11,4 @@ public interface YandexTranslateApi {
     Observable<Translation> getTranslation(@Query("key") String apiKey,
                                            @Query("text") String text,
                                            @Query("lang") String lang);
-
 }

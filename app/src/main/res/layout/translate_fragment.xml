@@ -13,7 +13,7 @@
         android:layout_height="120dp"
         android:background="@drawable/edittext_bg"
         android:gravity="top|start"
-        android:text="write your text here"
+        android:hint="write your text here "
         android:inputType="textMultiLine" />
 
     <RelativeLayout
@@ -28,16 +28,14 @@
             android:id="@+id/translated_text"
             android:layout_width="match_parent"
             android:layout_marginBottom="5dp"
-            android:layout_height="wrap_content"
-            android:text="trastalated text" />
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/original_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:layout_below="@id/translated_text"
-            android:text="trastalated text"/>
+            android:layout_below="@id/translated_text" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/dictionary_rv"
