@@ -25,15 +25,16 @@ public class DictionaryRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        return new ViewHolder(inflater.inflate(R.layout.dictionary_list_item, parent,false));
+        return new ViewHolder(inflater.inflate(R.layout.dictionary_list_item, parent, false));
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ((ViewHolder) holder).synonyms.setText(dictionary.getSynonyms(0, position));
+        ((ViewHolder) holder).position.setText(Integer.toString(position + 1));
         ((ViewHolder) holder).mean.setText(dictionary.getDef().get(0).getTr().
                 get(position).getMeansString());
-        if ( ((ViewHolder) holder).mean.getText().equals("")){
+        if (((ViewHolder) holder).mean.getText().equals("")) {
             ((ViewHolder) holder).mean.setVisibility(View.GONE);
         }
     }
@@ -53,11 +54,13 @@ public class DictionaryRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         TextView synonyms;
         TextView mean;
+        TextView position;
 
         ViewHolder(View view) {
             super(view);
             synonyms = (TextView) view.findViewById(R.id.synonyms);
             mean = (TextView) view.findViewById(R.id.mean);
+            position = (TextView) view.findViewById(R.id.position);
         }
     }
 }
