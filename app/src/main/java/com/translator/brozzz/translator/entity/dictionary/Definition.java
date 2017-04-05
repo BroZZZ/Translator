@@ -7,29 +7,22 @@ public class Definition {
 
     public Definition(String defenition) {
         this.defenition = defenition;
+        synonyms = defenition;
     }
 
     public String getSynonyms() {
-        return synonyms;
-    }
-
-    public void setSynonyms(String synonyms) {
-        this.synonyms = synonyms;
+        return  synonyms;
     }
 
     public String getMeans() {
-        return means;
-    }
-
-    public void setMeans(String means) {
-        this.means = means;
+        return "(" + means + ")";
     }
 
     public void addSynonym(String synonym) {
         if (synonyms.isEmpty()) {
-            synonyms = defenition;
+            synonyms = synonym;
         }
-        synonyms.concat(", ".concat(synonym));
+        synonyms = synonyms.concat(", ".concat(synonym));
     }
 
     public void addMean(String mean) {
