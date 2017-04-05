@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.translator.brozzz.translator.adapters.DictionaryRvAdapter;
+import com.translator.brozzz.translator.entity.DictionaryTest;
 import com.translator.brozzz.translator.entity.dictionary.Dictionary;
 import com.translator.brozzz.translator.interfaces.ITranslateFragment;
 import com.translator.brozzz.translator.interfaces.YandexDictionaryApi;
@@ -66,7 +67,7 @@ public class TranslatePresenter {
         }
     }
 
-    private void processDictionary(Dictionary dictionary) {
+    private void processDictionary(DictionaryTest dictionary) {
         mRvDictionaryAdapter.setDictionary(dictionary);
     }
 

@@ -7,18 +7,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.translator.brozzz.translator.R;
-import com.translator.brozzz.translator.entity.dictionary.Dictionary;
+import com.translator.brozzz.translator.entity.DictionaryTest;
 
 
 public class DictionaryRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private Dictionary dictionary;
+    private DictionaryTest dictionary;
 
-    public DictionaryRvAdapter(Dictionary dictionary) {
+    public DictionaryRvAdapter(DictionaryTest dictionary) {
         this.dictionary = dictionary;
     }
 
-    public void setDictionary(Dictionary dictionary) {
-        this.dictionary = dictionary;
+    public void setDictionary(DictionaryTest dictionary) {this.dictionary = dictionary;
         notifyDataSetChanged();
     }
 
@@ -30,10 +29,9 @@ public class DictionaryRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ((ViewHolder) holder).synonyms.setText(dictionary.getSynonyms(0, position));
+        ((ViewHolder) holder).synonyms.setText(dictionary.getDefinition(position).getSynonyms());
         ((ViewHolder) holder).position.setText(Integer.toString(position + 1));
-        ((ViewHolder) holder).mean.setText(dictionary.getDef().get(0).getTr().
-                get(position).getMeansString());
+        ((ViewHolder) holder).mean.setText(dictionary.getDefinition(position).getMeans());
         if (((ViewHolder) holder).mean.getText().equals("")) {
             ((ViewHolder) holder).mean.setVisibility(View.GONE);
         }
@@ -41,13 +39,11 @@ public class DictionaryRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
-        if (dictionary == null
-                || dictionary.getDef().size() == 0
-                || dictionary.getDef().get(0).getTr().size() == 0) {
+        if (dictionary == null) {
             return 0;
         }
 
-        return dictionary.getDef().get(0).getTr().size();
+        return dictionary.getDefinitionSize();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

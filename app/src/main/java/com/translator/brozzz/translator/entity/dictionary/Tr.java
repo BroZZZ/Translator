@@ -18,7 +18,7 @@ public class Tr {
     @SerializedName("syn")
     @Expose
     private List<Syn> syn = null;
-    @SerializedName("mean")
+    @SerializedName("means")
     @Expose
     private List<Mean> means = null;
 
