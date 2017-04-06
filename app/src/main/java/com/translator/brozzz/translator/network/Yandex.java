@@ -7,7 +7,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.translator.brozzz.translator.entity.DictionaryTest;
+import com.translator.brozzz.translator.entity.dictionary.Dictionary;
 import com.translator.brozzz.translator.entity.dictionary.Definition;
 import com.translator.brozzz.translator.interfaces.YandexDictionaryApi;
 import com.translator.brozzz.translator.interfaces.YandexTranslateApi;
@@ -44,7 +44,7 @@ public class Yandex {
         private static final String DICTIONARY_API_BASE_URL = "https://dictionary.yandex.net/";
 
         private static Gson gsontest = new GsonBuilder()
-                .registerTypeAdapter(DictionaryTest.class, new DictionaryDeserializer())
+                .registerTypeAdapter(Dictionary.class, new DictionaryDeserializer())
                 .create();
 
         private static YandexDictionaryApi yandexDictionaryApi = new Retrofit.Builder()
@@ -59,11 +59,11 @@ public class Yandex {
         }
     }
 
-    public static class DictionaryDeserializer implements JsonDeserializer<DictionaryTest> {
+    public static class DictionaryDeserializer implements JsonDeserializer<Dictionary> {
         @Override
-        public DictionaryTest deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        public Dictionary deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             json.getAsJsonObject().getAsJsonArray("def");
-            DictionaryTest dictionaryTest = new DictionaryTest();
+            Dictionary dictionary = new Dictionary();
             for (JsonElement jsonObject : json.getAsJsonObject().getAsJsonArray("def")) {
                 JsonArray translateArray = jsonObject.getAsJsonObject().getAsJsonArray("tr");
                 for (JsonElement trElement : translateArray) {
@@ -80,12 +80,12 @@ public class Yandex {
                             definition.addMean(meanElement.getAsJsonObject().get("text").getAsString());
                         }
                     }
-                    dictionaryTest.addDefinition(definition);
+                    dictionary.addDefinition(definition);
                 }
             }
 
 
-            return dictionaryTest;
+            return dictionary;
         }
     }
 }

@@ -1,38 +1,24 @@
-
 package com.translator.brozzz.translator.entity.dictionary;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.translator.brozzz.translator.utils.Utils.Constant.WORD_SEPARATOR;
-
 public class Dictionary {
-    //TODO нужно придумать куда это дело перенести
-    @SerializedName("def")
-    @Expose
-    private List<Def> def = null;
+    private List<Definition> definitionList = new ArrayList<>();
 
-    public List<Def> getDef() {
-        return def;
+    public Definition getDefinition(int pos) {
+        if (pos < definitionList.size()) {
+            return definitionList.get(pos);
+        }
+        return null;
     }
 
-    public String getSynonyms(int defId, int translationId) {
-        if (def == null
-                || defId >= def.size()
-                || translationId >= def.get(defId).getTr().size())
-            return "";
+    public void addDefinition(Definition definition) {
+        definitionList.add(definition);
+    }
 
-        Tr tr = def.get(defId).getTr().get(translationId);
-        StringBuilder sbSynonym = new StringBuilder(tr.getText());
-        if (tr.getSyn() != null) {
-            sbSynonym.append(WORD_SEPARATOR);
-            for (Syn syn : tr.getSyn()) {
-                sbSynonym.append(syn.getText() + WORD_SEPARATOR);
-            }
-            sbSynonym.delete(sbSynonym.length() - WORD_SEPARATOR.length(),sbSynonym.length());
-        }
-        return sbSynonym.toString();
+    public int getDefinitionSize() {
+        return definitionList.size();
     }
 }

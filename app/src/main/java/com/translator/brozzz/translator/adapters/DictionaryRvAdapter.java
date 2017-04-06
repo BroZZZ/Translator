@@ -7,17 +7,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.translator.brozzz.translator.R;
-import com.translator.brozzz.translator.entity.DictionaryTest;
+import com.translator.brozzz.translator.entity.dictionary.Dictionary;
 
 
 public class DictionaryRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private DictionaryTest dictionary;
+    private Dictionary dictionary;
 
-    public DictionaryRvAdapter(DictionaryTest dictionary) {
+    public DictionaryRvAdapter(Dictionary dictionary) {
         this.dictionary = dictionary;
     }
 
-    public void setDictionary(DictionaryTest dictionary) {this.dictionary = dictionary;
+    public void setDictionary(Dictionary dictionary) {this.dictionary = dictionary;
         notifyDataSetChanged();
     }
 
