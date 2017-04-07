@@ -13,12 +13,13 @@ import com.translator.brozzz.translator.entity.dictionary.Dictionary;
 public class DictionaryRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Dictionary dictionary;
 
-    public DictionaryRvAdapter(Dictionary dictionary) {
+    public void setDictionary(Dictionary dictionary) {
         this.dictionary = dictionary;
+        notifyDataSetChanged();
     }
 
-    public void setDictionary(Dictionary dictionary) {this.dictionary = dictionary;
-        notifyDataSetChanged();
+    public void clear() {
+        setDictionary(null);
     }
 
     @Override

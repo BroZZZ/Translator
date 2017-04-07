@@ -1,9 +1,9 @@
 package com.translator.brozzz.translator.entity.dictionary;
 
 public class Definition {
-    String defenition = "";
-    String synonyms = "";
-    String means = "";
+    private String defenition = "";
+    private String synonyms = "";
+    private String means = "";
 
     public Definition(String defenition) {
         this.defenition = defenition;
@@ -11,11 +11,12 @@ public class Definition {
     }
 
     public String getSynonyms() {
-        return  synonyms;
+        return synonyms;
     }
 
     public String getMeans() {
-        return "(" + means + ")";
+        if (!means.isEmpty()) return "(" + means + ")";
+        else return means;
     }
 
     public void addSynonym(String synonym) {

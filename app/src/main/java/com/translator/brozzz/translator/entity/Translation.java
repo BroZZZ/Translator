@@ -23,7 +23,7 @@ public class Translation {
         return lang;
     }
 
-    public String getTranslationString(){
+    public String getTranslatedText(){
         String arrayString = translation.toString();
         arrayString = arrayString.replace("[","");
         arrayString = arrayString.replace("]","");

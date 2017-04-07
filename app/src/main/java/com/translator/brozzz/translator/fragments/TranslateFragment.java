@@ -102,8 +102,15 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .map(text -> text.toString().trim())
                 .observeOn(AndroidSchedulers.mainThread())
+                .filter(s ->
+                {
+                    if (s.isEmpty()){
+                        clearText();
+                        mPresenter.getmRvDictionaryAdapter().clear();
+                    }
+                    return !s.isEmpty();
+                })
                 .subscribe(mPresenter::translate);
-
     }
 
     @Override
@@ -120,8 +127,13 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
 
     @Override
     public void displayTranslateResult(String originalText, String translatedText) {
-        mTranslatedText.setText(translatedText);
         mOriginalText.setText(originalText);
+        mTranslatedText.setText(translatedText);
+    }
+
+    private void clearText() {
+        mOriginalText.setText("");
+        mTranslatedText.setText("");
     }
 
     public void updateActionBar() {
