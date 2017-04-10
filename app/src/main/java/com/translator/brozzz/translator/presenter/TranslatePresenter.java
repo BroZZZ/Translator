@@ -49,28 +49,36 @@ public class TranslatePresenter {
 
     public void translate(String text) {
         mRvDictionaryAdapter.clear();
-        mDisposableTranslater = Observable.zip(mTranslaterApi
-                        .getTranslation(Yandex.TranslateApi.TRANSLATOR_API_KEY,
-                                text,
-                                getTranslationFormat())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread()),
-                mDictionaryApi
-                        .getDictionary(Yandex.DictionaryApi.DICTIONARY_API_KEY,
-                                text,
-                                getTranslationFormat())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread()),
-                (translation, dictionary) -> new TranslationInfo(text,translation,dictionary)
-        ).subscribe(
-                this::processTranslation,
-                throwable -> Toast.makeText(mContext, R.string.translate_error, Toast.LENGTH_SHORT).show());
+
+        TranslationInfo cacheTranslation = findTranslation(text);
+        if (cacheTranslation == null)
+            mDisposableTranslater = Observable.zip(mTranslaterApi
+                            .getTranslation(Yandex.TranslateApi.TRANSLATOR_API_KEY,
+                                    text,
+                                    getTranslationFormat())
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread()),
+                    mDictionaryApi
+                            .getDictionary(Yandex.DictionaryApi.DICTIONARY_API_KEY,
+                                    text,
+                                    getTranslationFormat())
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread()),
+                    (translation, dictionary) -> new TranslationInfo(text,translation,dictionary)
+            ).subscribe(
+                    this::processTranslation,
+                    throwable -> Toast.makeText(mContext, R.string.translate_error, Toast.LENGTH_SHORT).show());
+        else processTranslation(cacheTranslation);
+    }
+
+    private TranslationInfo findTranslation(String text) {
+        return mRealm.where(TranslationInfo.class).equalTo("originalText",text).findFirst();
     }
 
     private void processTranslation(TranslationInfo translationInfo) {
         storeTranslation(translationInfo);
-        mView.displayTranslateResult(translationInfo.getmOriginalText(), translationInfo.getmTranslation().getTranslatedText());
-        mRvDictionaryAdapter.setDictionary(translationInfo.getmDictionary());
+        mView.displayTranslateResult(translationInfo.getOriginalText(), translationInfo.getTranslation().getTranslatedText());
+        mRvDictionaryAdapter.setDictionary(translationInfo.getDictionary());
     }
 
     private void storeTranslation(TranslationInfo translationInfo) {

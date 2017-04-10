@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 public class YaTranslator extends Application {
 
@@ -11,6 +12,9 @@ public class YaTranslator extends Application {
     public void onCreate() {
         super.onCreate();
         Realm.init(this);
+        Realm.setDefaultConfiguration(new RealmConfiguration.Builder()
+                .deleteRealmIfMigrationNeeded()
+                .build());
     }
 
     @Override

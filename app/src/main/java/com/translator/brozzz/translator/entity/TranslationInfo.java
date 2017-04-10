@@ -7,29 +7,29 @@ import io.realm.annotations.PrimaryKey;
 
 public class TranslationInfo extends RealmObject {
     @PrimaryKey
-    private String mOriginalText;
-    private Translation mTranslation;
-    private Dictionary mDictionary;
+    private String originalText;
+    private Translation translation;
+    private Dictionary dictionary;
 
     public TranslationInfo() {
 
     }
 
     public TranslationInfo(String originalText, Translation translation, Dictionary dictionary) {
-        mTranslation = translation;
-        mDictionary = dictionary;
-        mOriginalText = originalText;
+        this.translation = translation;
+        this.dictionary = dictionary;
+        this.originalText = originalText;
     }
 
-    public Translation getmTranslation() {
-        return mTranslation;
+    public Translation getTranslation() {
+        return translation;
     }
 
-    public Dictionary getmDictionary() {
-        return mDictionary;
+    public Dictionary getDictionary() {
+        return dictionary;
     }
 
-    public String getmOriginalText() {
-        return mOriginalText;
+    public String getOriginalText() {
+        return originalText;
     }
 }

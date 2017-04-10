@@ -4,24 +4,24 @@ import io.realm.RealmObject;
 
 public class Translation extends RealmObject{
 
-    private String mTranslatedText;
+    private String translatedText;
 
-    private String mLang;
+    private String lang;
 
     public Translation() {
     }
 
     public Translation(String translatedText, String lang) {
-        this.mTranslatedText = translatedText;
-        this.mLang = lang;
+        this.translatedText = translatedText;
+        this.lang = lang;
     }
 
     public String getTranslatedText() {
-        return mTranslatedText;
+        return translatedText;
     }
 
     public String getLang() {
-        return mLang;
+        return lang;
     }
 
 }
