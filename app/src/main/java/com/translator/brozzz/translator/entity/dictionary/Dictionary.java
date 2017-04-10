@@ -1,24 +1,27 @@
 package com.translator.brozzz.translator.entity.dictionary;
 
+import io.realm.RealmList;
+import io.realm.RealmObject;
 
-import java.util.ArrayList;
-import java.util.List;
+public class Dictionary  extends RealmObject{
+    private RealmList<Definition> definitionsList = new RealmList<>();
 
-public class Dictionary {
-    private List<Definition> definitionList = new ArrayList<>();
+
+    public Dictionary() {
+    }
 
     public Definition getDefinition(int pos) {
-        if (pos < definitionList.size()) {
-            return definitionList.get(pos);
+        if (pos < definitionsList.size()) {
+            return definitionsList.get(pos);
         }
         return null;
     }
 
     public void addDefinition(Definition definition) {
-        definitionList.add(definition);
+        definitionsList.add(definition);
     }
 
     public int getDefinitionSize() {
-        return definitionList.size();
+        return definitionsList.size();
     }
 }

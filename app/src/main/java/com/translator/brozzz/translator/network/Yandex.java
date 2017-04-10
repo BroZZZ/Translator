@@ -7,8 +7,9 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.translator.brozzz.translator.entity.dictionary.Dictionary;
+import com.translator.brozzz.translator.entity.Translation;
 import com.translator.brozzz.translator.entity.dictionary.Definition;
+import com.translator.brozzz.translator.entity.dictionary.Dictionary;
 import com.translator.brozzz.translator.interfaces.YandexDictionaryApi;
 import com.translator.brozzz.translator.interfaces.YandexTranslateApi;
 
@@ -19,13 +20,13 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Yandex {
-    private static Gson gson = new GsonBuilder()
-            .create();
 
     public static class TranslateApi {
         public static final String TRANSLATOR_API_KEY = "trnsl.1.1.20170321T091507Z.5d4a62eb8c8c758d.19a4223d1dc1019da69006bc80e17685d394c534";
         private static final String TRANSLATOR_API_BASE_URL = "https://translate.yandex.net/";
-
+        private static final Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Translation.class, new TranslationDeserializer())
+                .create();
         private static YandexTranslateApi yandexTranslateApi = new Retrofit.Builder()
                 .baseUrl(TranslateApi.TRANSLATOR_API_BASE_URL) //Базовая часть адреса
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -39,18 +40,28 @@ public class Yandex {
 
     }
 
+    private static class TranslationDeserializer implements JsonDeserializer<Translation> {
+        @Override
+        public Translation deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            String lang = json.getAsJsonObject().get("lang").getAsString();
+            String text = json.getAsJsonObject().get("text").getAsString();
+
+            return new Translation(text, lang);
+        }
+    }
+
     public static class DictionaryApi {
         public static final String DICTIONARY_API_KEY = "dict.1.1.20170324T224309Z.9d5c946c31cb8396.e6ba9f50d45dcf44367faf8081bf71ef8b802a94";
         private static final String DICTIONARY_API_BASE_URL = "https://dictionary.yandex.net/";
 
-        private static Gson gsontest = new GsonBuilder()
+        private static final Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Dictionary.class, new DictionaryDeserializer())
                 .create();
 
         private static YandexDictionaryApi yandexDictionaryApi = new Retrofit.Builder()
                 .baseUrl(DictionaryApi.DICTIONARY_API_BASE_URL) //Базовая часть адреса
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create(gsontest)) //Конвертер, необходимый для преобразования JSON'а в объекты
+                .addConverterFactory(GsonConverterFactory.create(gson)) //Конвертер, необходимый для преобразования JSON'а в объекты
                 .build().create(YandexDictionaryApi.class);
 
 
@@ -59,7 +70,7 @@ public class Yandex {
         }
     }
 
-    public static class DictionaryDeserializer implements JsonDeserializer<Dictionary> {
+    private static class DictionaryDeserializer implements JsonDeserializer<Dictionary> {
         @Override
         public Dictionary deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             json.getAsJsonObject().getAsJsonArray("def");

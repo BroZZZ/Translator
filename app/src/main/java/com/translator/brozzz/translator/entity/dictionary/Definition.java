@@ -1,9 +1,15 @@
 package com.translator.brozzz.translator.entity.dictionary;
 
-public class Definition {
+import io.realm.RealmObject;
+
+public class Definition extends RealmObject {
+
     private String defenition = "";
     private String synonyms = "";
     private String means = "";
+
+    public Definition() {
+    }
 
     public Definition(String defenition) {
         this.defenition = defenition;

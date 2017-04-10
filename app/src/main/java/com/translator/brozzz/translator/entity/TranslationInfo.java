@@ -2,9 +2,15 @@ package com.translator.brozzz.translator.entity;
 
 import com.translator.brozzz.translator.entity.dictionary.Dictionary;
 
-public class TranslationInfo {
+import io.realm.RealmObject;
+
+public class TranslationInfo extends RealmObject {
     private Translation mTranslation;
     private Dictionary mDictionary;
+
+    public TranslationInfo() {
+
+    }
 
     public TranslationInfo(Translation mTranslation, Dictionary mDictionary) {
         this.mTranslation = mTranslation;

@@ -1,34 +1,27 @@
 package com.translator.brozzz.translator.entity;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import io.realm.RealmObject;
 
-import java.util.ArrayList;
+public class Translation extends RealmObject{
 
-public class Translation {
+    private String mTranslatedText;
 
-    @SerializedName("text")
-    @Expose
-    private ArrayList<String> translation;
+    private String mLang;
 
-    @SerializedName("lang")
-    @Expose
-    private String lang;
+    public Translation() {
+    }
 
-    public ArrayList<String> getTranslation() {
-        return translation;
+    public Translation(String translatedText, String lang) {
+        this.mTranslatedText = translatedText;
+        this.mLang = lang;
+    }
+
+    public String getTranslatedText() {
+        return mTranslatedText;
     }
 
     public String getLang() {
-        return lang;
+        return mLang;
     }
-
-    public String getTranslatedText(){
-        String arrayString = translation.toString();
-        arrayString = arrayString.replace("[","");
-        arrayString = arrayString.replace("]","");
-        return arrayString;
-    }
-
 
 }
