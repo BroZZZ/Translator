@@ -18,6 +18,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import io.realm.Realm;
 
 public class TranslatePresenter {
 
@@ -27,11 +28,13 @@ public class TranslatePresenter {
     private TranslateModel mModel;
     private DictionaryRvAdapter mRvDictionaryAdapter;
     private Context mContext;
+    private Realm mRealm;
 
     private Disposable mDisposableTranslater;
 
     public TranslatePresenter(Context context, ITranslateFragment fragmentView) {
         mView = fragmentView;
+        mRealm = Realm.getDefaultInstance();
         mContext = context;
         initModel(context);
         mRvDictionaryAdapter = new DictionaryRvAdapter();
@@ -58,15 +61,22 @@ public class TranslatePresenter {
                                 getTranslationFormat())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread()),
-                TranslationInfo::new
+                (translation, dictionary) -> new TranslationInfo(text,translation,dictionary)
         ).subscribe(
-                translationInfo -> this.processTranslation(translationInfo, text),
+                this::processTranslation,
                 throwable -> Toast.makeText(mContext, R.string.translate_error, Toast.LENGTH_SHORT).show());
     }
 
-    private void processTranslation(TranslationInfo translationInfo, String originalText) {
-        mView.displayTranslateResult(originalText, translationInfo.getmTranslation().getTranslatedText());
+    private void processTranslation(TranslationInfo translationInfo) {
+        storeTranslation(translationInfo);
+        mView.displayTranslateResult(translationInfo.getmOriginalText(), translationInfo.getmTranslation().getTranslatedText());
         mRvDictionaryAdapter.setDictionary(translationInfo.getmDictionary());
+    }
+
+    private void storeTranslation(TranslationInfo translationInfo) {
+        mRealm.beginTransaction();
+        mRealm.copyToRealmOrUpdate(translationInfo);
+        mRealm.commitTransaction();
     }
 
     public DictionaryRvAdapter getmRvDictionaryAdapter() {

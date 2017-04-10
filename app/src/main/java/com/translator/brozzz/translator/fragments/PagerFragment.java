@@ -3,6 +3,7 @@ package com.translator.brozzz.translator.fragments;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -14,8 +15,6 @@ import android.view.ViewGroup;
 
 import com.translator.brozzz.translator.R;
 import com.translator.brozzz.translator.adapters.PagerAdapter;
-
-import org.jetbrains.annotations.NotNull;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,7 +66,7 @@ public class PagerFragment extends Fragment implements TabLayout.OnTabSelectedLi
     }
 
     @SuppressWarnings({"ConstantConditions", "deprecation"})
-    private void setTabIconParams(@NotNull TabLayout tabLayout, int tabIndex, @DrawableRes int iconId) {
+    private void setTabIconParams(@NonNull TabLayout tabLayout, int tabIndex, @DrawableRes int iconId) {
         tabLayout.getTabAt(tabIndex).setIcon(iconId);
 
         tabLayout.getTabAt(tabIndex).getIcon().mutate()
