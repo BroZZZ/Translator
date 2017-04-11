@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.translator.brozzz.translator.R;
-import com.translator.brozzz.translator.adapters.PagerAdapter;
+import com.translator.brozzz.translator.adapters.MainPagerAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,18 +23,20 @@ public class PagerFragment extends Fragment implements TabLayout.OnTabSelectedLi
 
     @BindView(R.id.view_pager)
     ViewPager viewPager;
-    PagerAdapter pagerAdapter;
+
+    MainPagerAdapter mainPagerAdapter;
+
     private TabLayout mTabLayout;
 
 
     private void initViewPager() {
-        if (pagerAdapter == null) {
-            pagerAdapter = new PagerAdapter(getChildFragmentManager());
-            pagerAdapter.addFragment(new HistoryFragment());
-            pagerAdapter.addFragment(new TranslateFragment());
-            pagerAdapter.addFragment(new SettingFragment());
+        if (mainPagerAdapter == null) {
+            mainPagerAdapter = new MainPagerAdapter(getChildFragmentManager());
+            mainPagerAdapter.addFragment(new HistoryFragment());
+            mainPagerAdapter.addFragment(new TranslateFragment());
+            mainPagerAdapter.addFragment(new SettingFragment());
         }
-        viewPager.setAdapter(pagerAdapter);
+        viewPager.setAdapter(mainPagerAdapter);
     }
 
     @Override
