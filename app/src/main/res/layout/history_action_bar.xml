@@ -22,7 +22,7 @@
         android:layout_margin="5dp"
         app:tabGravity="fill"
         app:tabMode="fixed"
-        app:tabTextColor="@android:color/black"
+        app:tabTextColor="@color/colorUnselectedTab"
         app:tabSelectedTextColor="@android:color/black"
         android:layout_toStartOf="@+id/ib_deleteAll"
         android:layout_alignParentBottom="true" />
