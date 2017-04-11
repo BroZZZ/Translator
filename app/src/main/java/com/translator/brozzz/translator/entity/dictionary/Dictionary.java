@@ -24,4 +24,8 @@ public class Dictionary  extends RealmObject{
     public int getDefinitionSize() {
         return definitionsList.size();
     }
+
+    public RealmList<Definition> getDefinitionsList(){
+        return definitionsList;
+    }
 }

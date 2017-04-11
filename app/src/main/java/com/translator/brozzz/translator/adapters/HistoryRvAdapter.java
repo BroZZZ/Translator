@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.translator.brozzz.translator.R;
 import com.translator.brozzz.translator.entity.TranslationInfo;
-import com.translator.brozzz.translator.interfaces.IOnFavoriteClickListener;
+import com.translator.brozzz.translator.interfaces.IHistoryActionClickListener;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
@@ -21,10 +21,10 @@ import io.realm.RealmRecyclerViewAdapter;
 
 public class HistoryRvAdapter extends RealmRecyclerViewAdapter<TranslationInfo, RecyclerView.ViewHolder> {
 
-    private IOnFavoriteClickListener mListener;
+    private IHistoryActionClickListener mListener;
     private Context mContext;
 
-    public HistoryRvAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<TranslationInfo> data, IOnFavoriteClickListener listener) {
+    public HistoryRvAdapter(@NonNull Context context, @Nullable OrderedRealmCollection<TranslationInfo> data, IHistoryActionClickListener listener) {
         super(data, true);
         mContext = context;
         mListener = listener;
@@ -63,7 +63,7 @@ public class HistoryRvAdapter extends RealmRecyclerViewAdapter<TranslationInfo, 
             tv_lang = (TextView) view.findViewById(R.id.tv_lang);
             iv_favorite = (ImageView) view.findViewById(R.id.iv_favorite);
             iv_favorite.setOnClickListener(v ->
-                    mListener.OnClick(tv_originalText.getText().toString()));
+                    mListener.OnFavoriteClick(tv_originalText.getText().toString()));
         }
     }
 }

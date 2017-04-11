@@ -9,11 +9,13 @@ import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.translator.brozzz.translator.R;
 import com.translator.brozzz.translator.activities.MainActivity;
 import com.translator.brozzz.translator.adapters.HistoryTabPagerAdapter;
 import com.translator.brozzz.translator.interfaces.ActionBarFragment;
+import com.translator.brozzz.translator.interfaces.TabHistoryFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,9 +45,15 @@ public class HistoryPagerFragment extends ActionBarFragment implements TabLayout
 
     private void initViewPager() {
         if (historyTabPagerAdapter == null) {
+
             historyTabPagerAdapter = new HistoryTabPagerAdapter(getChildFragmentManager());
             historyTabPagerAdapter.addFragment(new HistoryFragment());
-            historyTabPagerAdapter.addFragment(new FavoriteFragment());
+
+            Bundle favoriteBundle = new Bundle();
+            favoriteBundle.putBoolean("onlyFavorite",true);
+            HistoryFragment favourite = new HistoryFragment();
+            favourite.setArguments(favoriteBundle);
+            historyTabPagerAdapter.addFragment(favourite);
         }
         viewPager.setAdapter(historyTabPagerAdapter);
     }
@@ -54,6 +62,10 @@ public class HistoryPagerFragment extends ActionBarFragment implements TabLayout
     public ActionBar setupSupportActionBarView(MainActivity activity, @LayoutRes int viewId) {
         ActionBar actionBar = super.setupSupportActionBarView(activity, viewId);
         initTabBar();
+        for (int i = 0; i < historyTabPagerAdapter.getCount(); i++) {
+            ((TabHistoryFragment)(historyTabPagerAdapter.getItem(i)))
+                    .setDeleteImageButton((ImageButton) actionBar.getCustomView().findViewById(R.id.ib_deleteAll));
+        }
         return actionBar;
     }
 
@@ -62,7 +74,6 @@ public class HistoryPagerFragment extends ActionBarFragment implements TabLayout
         if (mTabLayout != null) {
             mTabLayout.setupWithViewPager(viewPager);
             mTabLayout.addOnTabSelectedListener(this);
-            mTabLayout.getTabAt(0).setText("History");
             mTabLayout.getTabAt(0).setText("History");
             mTabLayout.getTabAt(1).setText("Favorite");
         }

@@ -49,4 +49,5 @@ public class TranslationInfo extends RealmObject {
     public void changeIsFavorite(){
         setFavourite(!isFavourite);
     }
+    
 }
