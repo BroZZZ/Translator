@@ -59,7 +59,7 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.translate_fragment, container, false);
         ButterKnife.bind(this, view);
-        dictionaryRv.setAdapter(mPresenter.getmRvDictionaryAdapter());
+        dictionaryRv.setAdapter(mPresenter.getRvDictionaryAdapter());
         dictionaryRv.setItemAnimator(new DefaultItemAnimator());
         dictionaryRv.setLayoutManager(new LinearLayoutManager(getActivity()));
         initRv();
@@ -69,7 +69,7 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
     }
 
     private void initRv() {
-        dictionaryRv.setAdapter(mPresenter.getmRvDictionaryAdapter());
+        dictionaryRv.setAdapter(mPresenter.getRvDictionaryAdapter());
         dictionaryRv.setItemAnimator(new DefaultItemAnimator());
         dictionaryRv.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
@@ -106,7 +106,7 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
                 {
                     if (s.isEmpty()){
                         clearText();
-                        mPresenter.getmRvDictionaryAdapter().clear();
+                        mPresenter.getRvDictionaryAdapter().clear();
                     }
                     return !s.isEmpty();
                 })

@@ -11,16 +11,22 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.translator.brozzz.translator.R;
-import com.translator.brozzz.translator.adapters.HistoryRvAdapter;
-import com.translator.brozzz.translator.entity.TranslationInfo;
+import com.translator.brozzz.translator.presenter.HistoryPresenter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.realm.Realm;
 
 public class HistoryFragment extends Fragment {
     @BindView(R.id.rv_history)
     RecyclerView mRvHistory;
+
+    HistoryPresenter mPresenter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mPresenter = new HistoryPresenter(getContext(), this);
+    }
 
     @Nullable
     @Override
@@ -31,9 +37,10 @@ public class HistoryFragment extends Fragment {
         return view;
     }
 
-    private void initRv() {
-        mRvHistory.setAdapter(new HistoryRvAdapter(Realm.getDefaultInstance().where(TranslationInfo.class).findAll()));
+    private void initRv(){
+        mRvHistory.setAdapter(mPresenter.getRvHistoryAdapter());
         mRvHistory.setItemAnimator(new DefaultItemAnimator());
         mRvHistory.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
+
 }

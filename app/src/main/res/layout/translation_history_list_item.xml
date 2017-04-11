@@ -14,31 +14,30 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_bookmark_black_24dp"
-            android:tint="@android:color/darker_gray"
-            android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
-            />
+            android:layout_marginStart="5dp"
+            android:src="@drawable/ic_bookmark_black_24dp"
+            android:tint="@color/colorUnselectedTab" />
 
         <TextView
             android:id="@+id/tv_lang"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="RU_EN"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:layout_marginEnd="5dp"
-            android:textSize="12sp"
-            android:textColor="@android:color/darker_gray"
-            android:layout_centerVertical="true"/>
+            android:text="RU-EN"
+            android:textColor="@color/colorUnselectedTab"
+            android:textSize="12sp" />
 
         <LinearLayout
             android:id="@+id/translate_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_margin="5dp"
             android:layout_toEndOf="@id/iv_favorite"
-            android:layout_toStartOf="@+id/tv_lang">
+            android:layout_toStartOf="@+id/tv_lang"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_original_text"
@@ -46,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:text="(testString)"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/tv_translated_text"
@@ -55,7 +54,7 @@
                 android:maxLines="1"
                 android:text="(testString)"
                 android:textColor="@android:color/holo_orange_dark"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
 
         </LinearLayout>
 

@@ -87,7 +87,7 @@ public class TranslatePresenter {
         mRealm.commitTransaction();
     }
 
-    public DictionaryRvAdapter getmRvDictionaryAdapter() {
+    public DictionaryRvAdapter getRvDictionaryAdapter() {
         return mRvDictionaryAdapter;
     }
 
