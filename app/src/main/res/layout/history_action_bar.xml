@@ -2,15 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="?android:attr/actionBarSize"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimary">
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/vp_history"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_toStartOf="@+id/btn_clear"
-        android:layout_margin="5dp"/>
-
 
     <ImageButton
         android:id="@+id/btn_clear"
@@ -21,5 +14,17 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="5dp"
         android:src="@drawable/ic_swap_horiz_black_24dp" />
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tl_history"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        app:tabGravity="fill"
+        app:tabMode="fixed"
+        app:tabTextColor="@android:color/black"
+        app:tabSelectedTextColor="@android:color/black"
+        android:layout_toStartOf="@+id/btn_clear"
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

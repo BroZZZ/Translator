@@ -1,8 +1,8 @@
 package com.translator.brozzz.translator.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.translator.brozzz.translator.R;
 import com.translator.brozzz.translator.activities.MainActivity;
+import com.translator.brozzz.translator.interfaces.ActionBarFragment;
 import com.translator.brozzz.translator.interfaces.ITranslateFragment;
 import com.translator.brozzz.translator.presenter.TranslatePresenter;
 
@@ -27,7 +28,7 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
-public class TranslateFragment extends Fragment implements ITranslateFragment {
+public class TranslateFragment extends ActionBarFragment implements ITranslateFragment {
 
     @BindView(R.id.translate_text)
     EditText mTranslateText;
@@ -63,8 +64,8 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
         dictionaryRv.setItemAnimator(new DefaultItemAnimator());
         dictionaryRv.setLayoutManager(new LinearLayoutManager(getActivity()));
         initRv();
-        initSupportActionBarView();
         setListeners();
+        updateActionBar();
         return view;
     }
 
@@ -74,20 +75,23 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
         dictionaryRv.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    private void initSupportActionBarView() {
-        ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
+    @Override
+    public ActionBar setupSupportActionBarView(MainActivity activity, @LayoutRes int viewId) {
+        ActionBar actionBar = super.setupSupportActionBarView(activity,viewId);
         if (actionBar != null) {
-            actionBar.setCustomView(R.layout.translate_action_bar);
             tvTranslateFrom = (TextView) actionBar.getCustomView()
                     .findViewById(R.id.translate_from);
-            tvTranslateFrom.setText("Английский");
             tvTranslateTo = (TextView) actionBar.getCustomView()
                     .findViewById(R.id.translate_to);
             btnSwitchLang = (ImageButton) actionBar.getCustomView()
                     .findViewById(R.id.btn_switch_lang);
+            if (mPresenter != null){
+                updateActionBar();
+            }
 
-            updateActionBar();
         }
+        return actionBar;
+
     }
 
     private void setListeners() {
