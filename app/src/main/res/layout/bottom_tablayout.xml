@@ -10,6 +10,6 @@
         app:tabGravity="fill"
         app:tabMode="fixed"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/edittext_bg"/>
+        android:background="@drawable/white_background_with_border"/>
 
 </android.support.design.widget.AppBarLayout>
