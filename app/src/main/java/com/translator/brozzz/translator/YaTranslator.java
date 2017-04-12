@@ -5,6 +5,7 @@ import android.content.Context;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import ru.yandex.speechkit.SpeechKit;
 
 public class YaTranslator extends Application {
 
@@ -15,6 +16,7 @@ public class YaTranslator extends Application {
         Realm.setDefaultConfiguration(new RealmConfiguration.Builder()
                 .deleteRealmIfMigrationNeeded()
                 .build());
+        SpeechKit.getInstance().configure(getApplicationContext(), "846dd4ec-a55b-4868-9640-42c72a278a19");
     }
 
     @Override

@@ -19,6 +19,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
+import ru.yandex.speechkit.Vocalizer;
 
 public class TranslatePresenter {
 
@@ -76,6 +77,7 @@ public class TranslatePresenter {
     }
 
     private void processTranslation(TranslationInfo translationInfo) {
+        Vocalizer.createVocalizer(Vocalizer.Language.RUSSIAN,translationInfo.getTranslation().getTranslatedText(),true).start();
         storeTranslation(translationInfo);
         mView.displayTranslateResult(translationInfo.getOriginalText(), translationInfo.getTranslation().getTranslatedText());
         mRvDictionaryAdapter.setDictionary(translationInfo.getDictionary());
