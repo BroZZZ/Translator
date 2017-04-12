@@ -6,4 +6,8 @@ public interface ITranslateFragment {
 
     void updateActionBar();
 
+    void setFinalRecognizedText(String text);
+
+    void setPartialRecognizedText(String text);
+
 }

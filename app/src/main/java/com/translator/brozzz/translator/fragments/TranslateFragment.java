@@ -48,6 +48,18 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
     @BindView(R.id.btn_switch_lang)
     ImageButton btnSwitchLang;
 
+    @BindView(R.id.ib_vocalize)
+    ImageButton ibVocalizeOrigin;
+
+    @BindView(R.id.ib_vocalize_translated)
+    ImageButton ibVocalizeTranslated;
+
+    @BindView(R.id.ib_favorite)
+    ImageButton ibFavorite;
+
+    @BindView(R.id.ib_recognize)
+    ImageButton ibRecognize;
+
     private Disposable mDisposableChangeText;
     private TranslatePresenter mPresenter;
 
@@ -81,6 +93,9 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
 
     private void setListeners() {
         btnSwitchLang.setOnClickListener(view -> mPresenter.switchLang());
+        ibVocalizeOrigin.setOnClickListener(view -> mPresenter.VocalizeWithOriginalLanguage(mTranslateText.getText().toString()));
+        ibVocalizeTranslated.setOnClickListener(view -> mPresenter.VocalizeWithResultLanguage(mTranslatedText.getText().toString()));
+        ibRecognize.setOnClickListener(view -> mPresenter.startRecognizeInput());
     }
 
     @Override
@@ -93,7 +108,7 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(s ->
                 {
-                    if (s.isEmpty()){
+                    if (s.isEmpty()) {
                         clearText();
                         mPresenter.getRvDictionaryAdapter().clear();
                     }
@@ -118,6 +133,37 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
     public void displayTranslateResult(String originalText, String translatedText) {
         mOriginalText.setText(originalText);
         mTranslatedText.setText(translatedText);
+    }
+
+    @Override
+    public void setFinalRecognizedText(String text) {
+        int selectionStart = mTranslateText.getSelectionStart();
+        int selectionEnd = mTranslateText.getSelectionEnd();
+        StringBuilder textBuilder = new StringBuilder(mTranslateText.getText().toString());
+        textBuilder.delete(selectionStart, selectionEnd);
+        textBuilder.insert(selectionStart, text);
+        selectionEnd = selectionStart + text.length();
+
+        mTranslateText.setText(textBuilder.toString());
+        mTranslateText.setSelection(selectionEnd);
+    }
+
+    @Override
+    public void setPartialRecognizedText(String text) {
+        int selectionStart = mTranslateText.getSelectionStart();
+        int selectionEnd = mTranslateText.getSelectionEnd();
+        StringBuilder textBuilder = new StringBuilder(mTranslateText.getText().toString());
+        if (selectionStart == selectionEnd) {
+            textBuilder.insert(selectionStart, text);
+            selectionEnd = mTranslateText.length() + text.length();
+        } else {
+            textBuilder.delete(selectionStart, selectionEnd);
+            textBuilder.insert(selectionStart, text);
+            selectionEnd = selectionStart + text.length();
+        }
+
+        mTranslateText.setText(textBuilder.toString());
+        mTranslateText.setSelection(selectionStart, selectionEnd);
     }
 
     private void clearText() {

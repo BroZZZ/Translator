@@ -1,7 +1,10 @@
 package com.translator.brozzz.translator.presenter;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
 import com.translator.brozzz.translator.R;
@@ -12,6 +15,7 @@ import com.translator.brozzz.translator.interfaces.YandexDictionaryApi;
 import com.translator.brozzz.translator.interfaces.YandexTranslateApi;
 import com.translator.brozzz.translator.model.TranslateModel;
 import com.translator.brozzz.translator.network.Yandex;
+import com.translator.brozzz.translator.utils.RecognizeHelper;
 import com.translator.brozzz.translator.utils.Utils;
 
 import io.reactivex.Observable;
@@ -19,9 +23,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
+import ru.yandex.speechkit.Recognizer;
 import ru.yandex.speechkit.Vocalizer;
 
 public class TranslatePresenter {
+    public static final int ORIGINAL_TEXT = 0;
+    public static final int TRANSLATED_TEXT = 1;
 
     private YandexTranslateApi mTranslaterApi = Yandex.TranslateApi.getTranslateApi();
     private YandexDictionaryApi mDictionaryApi = Yandex.DictionaryApi.getDictionaryApi();
@@ -30,11 +37,13 @@ public class TranslatePresenter {
     private DictionaryRvAdapter mRvDictionaryAdapter;
     private Context mContext;
     private Realm mRealm;
+    private RecognizeHelper mRecognizeHelper;
 
     private Disposable mDisposableTranslater;
 
     public TranslatePresenter(Context context, ITranslateFragment fragmentView) {
         mView = fragmentView;
+        mRecognizeHelper = new RecognizeHelper(mView);
         mRealm = Realm.getDefaultInstance();
         mContext = context;
         initModel(context);
@@ -65,7 +74,7 @@ public class TranslatePresenter {
                                     getTranslationFormat())
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread()),
-                    (translation, dictionary) -> new TranslationInfo(text,translation,dictionary)
+                    (translation, dictionary) -> new TranslationInfo(text, translation, dictionary)
             ).subscribe(
                     this::processTranslation,
                     throwable -> Toast.makeText(mContext, R.string.translate_error, Toast.LENGTH_SHORT).show());
@@ -73,14 +82,25 @@ public class TranslatePresenter {
     }
 
     private TranslationInfo findTranslation(String text) {
-        return mRealm.where(TranslationInfo.class).equalTo("originalText",text).findFirst();
+        return mRealm.where(TranslationInfo.class).equalTo("originalText", text).findFirst();
     }
 
     private void processTranslation(TranslationInfo translationInfo) {
-        Vocalizer.createVocalizer(Vocalizer.Language.RUSSIAN,translationInfo.getTranslation().getTranslatedText(),true).start();
         storeTranslation(translationInfo);
         mView.displayTranslateResult(translationInfo.getOriginalText(), translationInfo.getTranslation().getTranslatedText());
         mRvDictionaryAdapter.setDictionary(translationInfo.getDictionary());
+    }
+
+    public void VocalizeWithOriginalLanguage(String text) {
+        Vocalize(text, mModel.getTranslateFrom());
+    }
+
+    public void VocalizeWithResultLanguage(String text) {
+        Vocalize(text, mModel.getTranslateTo());
+    }
+
+    private void Vocalize(String text, Utils.Lang language) {
+        Vocalizer.createVocalizer(language.getCode(), text, true).start();
     }
 
     private void storeTranslation(TranslationInfo translationInfo) {
@@ -129,4 +149,10 @@ public class TranslatePresenter {
         return mModel.getTranslateTo().getName();
     }
 
+    public void startRecognizeInput() {
+        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        Recognizer.create(mModel.getTranslateFrom().getCode(), Recognizer.Model.NOTES, mRecognizeHelper, false).start();
+    }
 }
