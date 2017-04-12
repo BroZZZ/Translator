@@ -1,30 +1,29 @@
-package com.translator.brozzz.translator.fragments;
+package com.translator.brozzz.translator.fragments.history;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 
 import com.translator.brozzz.translator.R;
-import com.translator.brozzz.translator.interfaces.TabHistoryFragment;
 import com.translator.brozzz.translator.presenter.HistoryPresenter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class HistoryFragment extends TabHistoryFragment {
+public class HistoryFragment extends Fragment {
 
     @BindView(R.id.rv_history)
     RecyclerView mRvHistory;
 
     private boolean mOnlyFavourite;
 
-    HistoryPresenter mPresenter;
+    private HistoryPresenter mPresenter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,9 +50,7 @@ public class HistoryFragment extends TabHistoryFragment {
         mRvHistory.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    @Override
-    public void setDeleteImageButton(ImageButton imageButton) {
-        super.setDeleteImageButton(imageButton);
-        ib_delete.setOnClickListener(view -> mPresenter.clearRealmCollection());
+    public void clearData(){
+        mPresenter.clearRealmCollection();
     }
 }

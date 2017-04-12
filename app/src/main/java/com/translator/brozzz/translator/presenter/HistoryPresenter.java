@@ -58,7 +58,7 @@ public class HistoryPresenter implements IHistoryActionClickListener {
     public void clearRealmCollection() {
         if (mRvHistoryAdapter.getData() != null) {
             mRealm.beginTransaction();
-            for (TranslationInfo translationInfo :mRvHistoryAdapter.getData()) {
+            for (TranslationInfo translationInfo : mRvHistoryAdapter.getData()) {
                 translationInfo.getTranslation().deleteFromRealm();
                 translationInfo.getDictionary().getDefinitionsList().deleteAllFromRealm();
                 translationInfo.getDictionary().deleteFromRealm();

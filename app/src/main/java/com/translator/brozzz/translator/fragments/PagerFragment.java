@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.translator.brozzz.translator.R;
 import com.translator.brozzz.translator.adapters.MainPagerAdapter;
+import com.translator.brozzz.translator.fragments.history.HistoryPagerFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

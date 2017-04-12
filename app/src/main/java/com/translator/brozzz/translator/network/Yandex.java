@@ -95,7 +95,6 @@ public class Yandex {
                 }
             }
 
-
             return dictionary;
         }
     }

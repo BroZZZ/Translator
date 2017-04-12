@@ -1,20 +1,17 @@
-package com.translator.brozzz.translator.fragments;
+package com.translator.brozzz.translator.fragments.history;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.translator.brozzz.translator.R;
-import com.translator.brozzz.translator.activities.MainActivity;
 import com.translator.brozzz.translator.adapters.HistoryTabPagerAdapter;
-import com.translator.brozzz.translator.interfaces.TabHistoryFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,6 +22,8 @@ public class HistoryPagerFragment extends Fragment implements TabLayout.OnTabSel
     ViewPager viewPager;
     @BindView(R.id.tl_history)
     TabLayout mTabLayout;
+    @BindView(R.id.ib_deleteAll)
+    ImageView ibDeleteAll;
 
     private HistoryTabPagerAdapter historyTabPagerAdapter;
 
@@ -42,6 +41,10 @@ public class HistoryPagerFragment extends Fragment implements TabLayout.OnTabSel
         ViewGroup insertPoint = (ViewGroup) view.findViewById(R.id.action_bar_container);
         inflater.inflate(R.layout.history_action_bar, insertPoint, true);
         ButterKnife.bind(this, view);
+
+        ibDeleteAll.setOnClickListener(v -> historyTabPagerAdapter
+                .getHistoryItem(mTabLayout.getSelectedTabPosition()).clearData());
+
         initViewPager();
         initTabBar();
         return view;
@@ -67,15 +70,13 @@ public class HistoryPagerFragment extends Fragment implements TabLayout.OnTabSel
         mTabLayout.addOnTabSelectedListener(this);
         mTabLayout.getTabAt(0).setText("History");
         mTabLayout.getTabAt(1).setText("Favorite");
+        onTabSelected(mTabLayout.getTabAt(0));
     }
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            TabHistoryFragment selectedTab = (TabHistoryFragment) historyTabPagerAdapter.getItem(tab.getPosition());
-            selectedTab.setDeleteImageButton((ImageButton) actionBar.getCustomView().findViewById(R.id.ib_deleteAll));
-        }
+        HistoryFragment selectedTab = historyTabPagerAdapter.getHistoryItem(tab.getPosition());
+
     }
 
     @Override
