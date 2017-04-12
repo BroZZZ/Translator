@@ -28,7 +28,7 @@
                 android:id="@+id/translate_text"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:layout_toStartOf="@+id/control_container"
+                android:layout_toStartOf="@+id/translate_control_container"
                 android:background="@android:color/transparent"
                 android:gravity="top|start"
                 android:hint="write your text here "
