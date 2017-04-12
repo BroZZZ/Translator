@@ -19,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
         if (savedInstanceState == null) {
             setCurrentFragment(new PagerFragment(), false, null);
         }

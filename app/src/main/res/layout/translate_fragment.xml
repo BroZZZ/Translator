@@ -4,47 +4,58 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="5dp"
-    android:background="@android:color/white"
-    android:padding="8dp">
+    android:background="@android:color/white">
 
-    <EditText
-        android:id="@+id/translate_text"
+    <FrameLayout
+        android:id="@+id/action_bar_container"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:background="@drawable/edittext_bg"
-        android:gravity="top|start"
-        android:hint="write your text here "
-        android:inputType="textMultiLine" />
+        android:layout_height="wrap_content"/>
 
     <RelativeLayout
-        android:id="@+id/translate_result_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/translate_text"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="5dp">
+        android:layout_height="match_parent"
+        android:layout_below="@id/action_bar_container"
+        android:layout_margin="8dp">
 
-        <TextView
-            android:id="@+id/translated_text"
+        <EditText
+            android:id="@+id/translate_text"
             android:layout_width="match_parent"
-            android:layout_marginBottom="5dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="120dp"
+            android:background="@drawable/edittext_bg"
+            android:gravity="top|start"
+            android:hint="write your text here "
+            android:inputType="textMultiLine" />
 
-        <TextView
-            android:id="@+id/original_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_below="@id/translated_text" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/dictionary_rv"
+        <RelativeLayout
+            android:id="@+id/translate_result_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_below="@id/original_text">
+            android:layout_below="@id/translate_text"
+            android:layout_marginStart="5dp">
 
-        </android.support.v7.widget.RecyclerView>
+            <TextView
+                android:id="@+id/translated_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp" />
+
+            <TextView
+                android:id="@+id/original_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/translated_text"
+                android:layout_marginBottom="5dp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/dictionary_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@id/original_text">
+
+            </android.support.v7.widget.RecyclerView>
+        </RelativeLayout>
     </RelativeLayout>
 
 </RelativeLayout>

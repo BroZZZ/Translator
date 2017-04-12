@@ -14,9 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.translator.brozzz.translator.R;
-import com.translator.brozzz.translator.activities.MainActivity;
 import com.translator.brozzz.translator.adapters.MainPagerAdapter;
-import com.translator.brozzz.translator.interfaces.ActionBarFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -89,19 +87,6 @@ public class PagerFragment extends Fragment implements TabLayout.OnTabSelectedLi
                                     R.color.colorSelectedTab, getContext().getTheme()),
                                     PorterDuff.Mode.MULTIPLY);
                 }
-                ActionBarFragment selectedFragment = ((ActionBarFragment) mainPagerAdapter.getItem(tab.getPosition()));
-                switch (tab.getPosition()) {
-                    case 0:
-                        selectedFragment.setupSupportActionBarView((MainActivity) getActivity(), R.layout.history_action_bar);
-                        break;
-                    case 1:
-                        selectedFragment.setupSupportActionBarView((MainActivity) getActivity(), R.layout.translate_action_bar);
-                        break;
-                    default:
-                        break;
-                }
-
-
             }
         }
     }

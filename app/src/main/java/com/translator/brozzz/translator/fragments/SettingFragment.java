@@ -1,5 +1,6 @@
 package com.translator.brozzz.translator.fragments;
 
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -7,9 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.translator.brozzz.translator.R;
-import com.translator.brozzz.translator.interfaces.ActionBarFragment;
 
-public class SettingFragment extends ActionBarFragment {
+public class SettingFragment extends Fragment {
 
     @Nullable
     @Override

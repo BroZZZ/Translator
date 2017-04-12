@@ -1,7 +1,7 @@
 package com.translator.brozzz.translator.fragments;
 
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -14,29 +14,33 @@ import android.widget.ImageButton;
 import com.translator.brozzz.translator.R;
 import com.translator.brozzz.translator.activities.MainActivity;
 import com.translator.brozzz.translator.adapters.HistoryTabPagerAdapter;
-import com.translator.brozzz.translator.interfaces.ActionBarFragment;
 import com.translator.brozzz.translator.interfaces.TabHistoryFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class HistoryPagerFragment extends ActionBarFragment implements TabLayout.OnTabSelectedListener {
+public class HistoryPagerFragment extends Fragment implements TabLayout.OnTabSelectedListener {
+
     @BindView(R.id.view_pager)
     ViewPager viewPager;
+    @BindView(R.id.tl_history)
+    TabLayout mTabLayout;
+
     private HistoryTabPagerAdapter historyTabPagerAdapter;
-    private TabLayout mTabLayout;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pager, container, false);
+
+        ViewGroup insertPoint = (ViewGroup) view.findViewById(R.id.action_bar_container);
+        inflater.inflate(R.layout.history_action_bar, insertPoint, true);
         ButterKnife.bind(this, view);
         initViewPager();
         initTabBar();
@@ -50,7 +54,7 @@ public class HistoryPagerFragment extends ActionBarFragment implements TabLayout
             historyTabPagerAdapter.addFragment(new HistoryFragment());
 
             Bundle favoriteBundle = new Bundle();
-            favoriteBundle.putBoolean("onlyFavorite",true);
+            favoriteBundle.putBoolean("onlyFavorite", true);
             HistoryFragment favourite = new HistoryFragment();
             favourite.setArguments(favoriteBundle);
             historyTabPagerAdapter.addFragment(favourite);
@@ -58,27 +62,16 @@ public class HistoryPagerFragment extends ActionBarFragment implements TabLayout
         viewPager.setAdapter(historyTabPagerAdapter);
     }
 
-    @Override
-    public ActionBar setupSupportActionBarView(MainActivity activity, @LayoutRes int viewId) {
-        ActionBar actionBar = super.setupSupportActionBarView(activity, viewId);
-        initTabBar();
-        onTabSelected(mTabLayout.getTabAt(mTabLayout.getSelectedTabPosition()));
-        return actionBar;
-    }
-
     protected void initTabBar() {
-        mTabLayout = (TabLayout) getActivity().findViewById(R.id.tl_history);
-        if (mTabLayout != null) {
-            mTabLayout.setupWithViewPager(viewPager);
-            mTabLayout.addOnTabSelectedListener(this);
-            mTabLayout.getTabAt(0).setText("History");
-            mTabLayout.getTabAt(1).setText("Favorite");
-        }
+        mTabLayout.setupWithViewPager(viewPager);
+        mTabLayout.addOnTabSelectedListener(this);
+        mTabLayout.getTabAt(0).setText("History");
+        mTabLayout.getTabAt(1).setText("Favorite");
     }
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        ActionBar actionBar = ((MainActivity)getActivity()).getSupportActionBar();
+        ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
             TabHistoryFragment selectedTab = (TabHistoryFragment) historyTabPagerAdapter.getItem(tab.getPosition());
             selectedTab.setDeleteImageButton((ImageButton) actionBar.getCustomView().findViewById(R.id.ib_deleteAll));

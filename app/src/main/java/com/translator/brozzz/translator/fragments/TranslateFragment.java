@@ -1,9 +1,8 @@
 package com.translator.brozzz.translator.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,8 +15,6 @@ import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.translator.brozzz.translator.R;
-import com.translator.brozzz.translator.activities.MainActivity;
-import com.translator.brozzz.translator.interfaces.ActionBarFragment;
 import com.translator.brozzz.translator.interfaces.ITranslateFragment;
 import com.translator.brozzz.translator.presenter.TranslatePresenter;
 
@@ -28,7 +25,7 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
-public class TranslateFragment extends ActionBarFragment implements ITranslateFragment {
+public class TranslateFragment extends Fragment implements ITranslateFragment {
 
     @BindView(R.id.translate_text)
     EditText mTranslateText;
@@ -42,8 +39,13 @@ public class TranslateFragment extends ActionBarFragment implements ITranslateFr
     @BindView(R.id.dictionary_rv)
     RecyclerView dictionaryRv;
 
+    @BindView(R.id.translate_from)
     TextView tvTranslateFrom;
+
+    @BindView(R.id.translate_to)
     TextView tvTranslateTo;
+
+    @BindView(R.id.btn_switch_lang)
     ImageButton btnSwitchLang;
 
     private Disposable mDisposableChangeText;
@@ -59,6 +61,8 @@ public class TranslateFragment extends ActionBarFragment implements ITranslateFr
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.translate_fragment, container, false);
+        ViewGroup insertPoint = (ViewGroup) view.findViewById(R.id.action_bar_container);
+        inflater.inflate(R.layout.translate_action_bar, insertPoint, true);
         ButterKnife.bind(this, view);
         dictionaryRv.setAdapter(mPresenter.getRvDictionaryAdapter());
         dictionaryRv.setItemAnimator(new DefaultItemAnimator());
@@ -73,25 +77,6 @@ public class TranslateFragment extends ActionBarFragment implements ITranslateFr
         dictionaryRv.setAdapter(mPresenter.getRvDictionaryAdapter());
         dictionaryRv.setItemAnimator(new DefaultItemAnimator());
         dictionaryRv.setLayoutManager(new LinearLayoutManager(getActivity()));
-    }
-
-    @Override
-    public ActionBar setupSupportActionBarView(MainActivity activity, @LayoutRes int viewId) {
-        ActionBar actionBar = super.setupSupportActionBarView(activity,viewId);
-        if (actionBar != null) {
-            tvTranslateFrom = (TextView) actionBar.getCustomView()
-                    .findViewById(R.id.translate_from);
-            tvTranslateTo = (TextView) actionBar.getCustomView()
-                    .findViewById(R.id.translate_to);
-            btnSwitchLang = (ImageButton) actionBar.getCustomView()
-                    .findViewById(R.id.btn_switch_lang);
-            if (mPresenter != null){
-                updateActionBar();
-            }
-
-        }
-        return actionBar;
-
     }
 
     private void setListeners() {
