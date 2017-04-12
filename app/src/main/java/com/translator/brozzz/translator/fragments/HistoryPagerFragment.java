@@ -62,10 +62,7 @@ public class HistoryPagerFragment extends ActionBarFragment implements TabLayout
     public ActionBar setupSupportActionBarView(MainActivity activity, @LayoutRes int viewId) {
         ActionBar actionBar = super.setupSupportActionBarView(activity, viewId);
         initTabBar();
-        for (int i = 0; i < historyTabPagerAdapter.getCount(); i++) {
-            ((TabHistoryFragment)(historyTabPagerAdapter.getItem(i)))
-                    .setDeleteImageButton((ImageButton) actionBar.getCustomView().findViewById(R.id.ib_deleteAll));
-        }
+        onTabSelected(mTabLayout.getTabAt(mTabLayout.getSelectedTabPosition()));
         return actionBar;
     }
 
@@ -81,7 +78,11 @@ public class HistoryPagerFragment extends ActionBarFragment implements TabLayout
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-
+        ActionBar actionBar = ((MainActivity)getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            TabHistoryFragment selectedTab = (TabHistoryFragment) historyTabPagerAdapter.getItem(tab.getPosition());
+            selectedTab.setDeleteImageButton((ImageButton) actionBar.getCustomView().findViewById(R.id.ib_deleteAll));
+        }
     }
 
     @Override
