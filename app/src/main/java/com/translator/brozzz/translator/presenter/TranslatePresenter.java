@@ -82,17 +82,21 @@ public class TranslatePresenter {
     }
 
     private void processTranslation(TranslationInfo translationInfo) {
+        mModel.setTranslationInfo(translationInfo);
         storeTranslation(translationInfo);
         mView.displayTranslateResult(translationInfo.getOriginalText(), translationInfo.getTranslation().getTranslatedText());
         mRvDictionaryAdapter.setDictionary(translationInfo.getDictionary());
     }
 
-    public void vocalizeWithOriginalLanguage(String text) {
-        mSpeechkitHelper.Vocalize(text, mModel.getTranslateFrom());
+    public void vocalizeOriginalText() {
+        if (mModel.getTranslationInfo() != null)
+            mSpeechkitHelper.Vocalize(mModel.getTranslationInfo().getOriginalText(), mModel.getTranslateFrom());
     }
 
-    public void vocalizeWithResultLanguage(String text) {
-        mSpeechkitHelper.Vocalize(text, mModel.getTranslateTo());
+    public void vocalizeTranslatedText() {
+        if (mModel.getTranslationInfo() != null)
+            mSpeechkitHelper.Vocalize(mModel.getTranslationInfo().getTranslation().getTranslatedText(),
+                    mModel.getTranslateFrom());
     }
 
     private void storeTranslation(TranslationInfo translationInfo) {
