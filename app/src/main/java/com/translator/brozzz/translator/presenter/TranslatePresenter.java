@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.translator.brozzz.translator.R;
 import com.translator.brozzz.translator.adapters.DictionaryRvAdapter;
 import com.translator.brozzz.translator.entity.TranslationInfo;
+import com.translator.brozzz.translator.fragments.TranslateFragment;
 import com.translator.brozzz.translator.interfaces.ITranslateFragment;
 import com.translator.brozzz.translator.interfaces.YandexDictionaryApi;
 import com.translator.brozzz.translator.interfaces.YandexTranslateApi;
@@ -87,12 +88,12 @@ public class TranslatePresenter {
         mRvDictionaryAdapter.setDictionary(translationInfo.getDictionary());
     }
 
-    public void vocalizeWithOriginalLanguage(String text) {
-        mSpeechkitHelper.Vocalize(text, mModel.getTranslateFrom());
-    }
-
-    public void vocalizeWithResultLanguage(String text) {
-        mSpeechkitHelper.Vocalize(text, mModel.getTranslateTo());
+    public void vocalize(String text, int textTypeId) {
+        if (textTypeId == TranslateFragment.ORIGINAL_TEXT)
+            mSpeechkitHelper.Vocalize(text, mModel.getTranslateFrom(), textTypeId);
+        else {
+            mSpeechkitHelper.Vocalize(text, mModel.getTranslateTo(), textTypeId);
+        }
     }
 
     private void storeTranslation(TranslationInfo translationInfo) {
