@@ -1,26 +1,22 @@
 package com.translator.brozzz.translator.fragments.history;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.translator.brozzz.translator.R;
+import com.translator.brozzz.translator.databinding.HistoryFragmentBinding;
 import com.translator.brozzz.translator.presenter.HistoryPresenter;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class HistoryFragment extends Fragment {
 
-    @BindView(R.id.rv_history)
-    RecyclerView mRvHistory;
-
+    HistoryFragmentBinding mHistoryBinding;
     private boolean mOnlyFavourite;
 
     private HistoryPresenter mPresenter;
@@ -38,19 +34,18 @@ public class HistoryFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.history_fragment, container, false);
-        ButterKnife.bind(this, view);
+        mHistoryBinding = DataBindingUtil.inflate(inflater, R.layout.history_fragment, container, false);
         initRv();
-        return view;
+        return mHistoryBinding.getRoot();
     }
 
     public void initRv() {
-        mRvHistory.setAdapter(mPresenter.getRvHistoryAdapter());
-        mRvHistory.setItemAnimator(new DefaultItemAnimator());
-        mRvHistory.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mHistoryBinding.rvHistory.setAdapter(mPresenter.getRvHistoryAdapter());
+        mHistoryBinding.rvHistory.setItemAnimator(new DefaultItemAnimator());
+        mHistoryBinding.rvHistory.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    public void clearData(){
+    public void clearData() {
         mPresenter.clearRealmCollection();
     }
 }

@@ -152,4 +152,9 @@ public class TranslatePresenter {
         }
         mSpeechkitHelper.startRecognize(mModel.getTranslateFrom().getCode());
     }
+
+    public void addCurrentTranslationToFavorite(){
+        mModel.getTranslationInfo().changeIsFavorite();
+        storeTranslation(mModel.getTranslationInfo());
+    }
 }

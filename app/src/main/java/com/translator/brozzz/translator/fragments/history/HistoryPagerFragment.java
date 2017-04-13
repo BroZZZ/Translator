@@ -15,7 +15,8 @@ import com.translator.brozzz.translator.databinding.FragmentPagerBinding;
 import com.translator.brozzz.translator.databinding.HistoryActionBarBinding;
 
 public class HistoryPagerFragment extends Fragment implements TabLayout.OnTabSelectedListener {
-
+    private static final int HISTORY_FRAGMENT_POSITION = 0;
+    private static final int FAVORITE_FRAGMENT_POSITION = 1;
     private FragmentPagerBinding mPagerBinding;
     private HistoryActionBarBinding mActionBarBinding;
     private HistoryTabPagerAdapter historyTabPagerAdapter;
@@ -57,14 +58,13 @@ public class HistoryPagerFragment extends Fragment implements TabLayout.OnTabSel
     protected void initTabBar() {
         mActionBarBinding.tlHistory.setupWithViewPager(mPagerBinding.viewPager);
         mActionBarBinding.tlHistory.addOnTabSelectedListener(this);
-        mActionBarBinding.tlHistory.getTabAt(0).setText("History");
-        mActionBarBinding.tlHistory.getTabAt(1).setText("Favorite");
+        mActionBarBinding.tlHistory.getTabAt(HISTORY_FRAGMENT_POSITION).setText("History");
+        mActionBarBinding.tlHistory.getTabAt(FAVORITE_FRAGMENT_POSITION).setText("Favorite");
         onTabSelected(mActionBarBinding.tlHistory.getTabAt(0));
     }
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        HistoryFragment selectedTab = historyTabPagerAdapter.getHistoryItem(tab.getPosition());
     }
 
     @Override
