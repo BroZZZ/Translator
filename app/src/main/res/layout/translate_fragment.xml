@@ -6,6 +6,7 @@
         <variable
             name="translatePresenter"
             type="com.translator.brozzz.translator.presenter.TranslatePresenter" />
+
     </data>
 
     <RelativeLayout
@@ -63,7 +64,7 @@
                         android:id="@+id/ib_recognize"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:onClick="@{() -&gt; translatePresenter.startRecognizeInput()}"
+
                         android:layout_weight="1"
                         android:background="@null"
                         android:src="@drawable/ic_mic_black_24dp" />
@@ -96,7 +97,7 @@
                     android:layout_margin="10dp"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:onClick="@{() -&gt; translatePresenter.addCurrentTranslationToFavorite()}"
+                    android:onClick="@{() -&gt; translatePresenter.startRecognizeInput()}"
                     android:src="@drawable/ic_bookmark_black_24dp" />
 
             </LinearLayout>
