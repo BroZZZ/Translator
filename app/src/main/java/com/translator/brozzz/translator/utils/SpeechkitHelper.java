@@ -6,13 +6,34 @@ import ru.yandex.speechkit.Error;
 import ru.yandex.speechkit.Recognition;
 import ru.yandex.speechkit.Recognizer;
 import ru.yandex.speechkit.RecognizerListener;
+import ru.yandex.speechkit.Vocalizer;
 
-public class RecognizeHelper implements RecognizerListener {
+public class SpeechkitHelper implements RecognizerListener {
 
+    private Vocalizer vocalizer;
+    private Recognizer recognizer;
     private ITranslateFragment mDestinationView;
 
-    public RecognizeHelper(ITranslateFragment destinationView) {
+    public SpeechkitHelper(ITranslateFragment destinationView) {
         mDestinationView = destinationView;
+    }
+
+    public void Vocalize(String text, Utils.Lang language) {
+        vocalizer = Vocalizer.createVocalizer(language.getCode(), text, true);
+        vocalizer.start();
+    }
+
+    public void startRecognize(String language) throws SecurityException {
+        recognizer = Recognizer.create(language, Recognizer.Model.NOTES, this, false);
+        recognizer.start();
+    }
+
+    public void dismiss() {
+        if (vocalizer != null)
+            vocalizer.cancel();
+        if (recognizer != null) {
+            recognizer.cancel();
+        }
     }
 
     @Override

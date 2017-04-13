@@ -15,7 +15,7 @@ import com.translator.brozzz.translator.interfaces.YandexDictionaryApi;
 import com.translator.brozzz.translator.interfaces.YandexTranslateApi;
 import com.translator.brozzz.translator.model.TranslateModel;
 import com.translator.brozzz.translator.network.Yandex;
-import com.translator.brozzz.translator.utils.RecognizeHelper;
+import com.translator.brozzz.translator.utils.SpeechkitHelper;
 import com.translator.brozzz.translator.utils.Utils;
 
 import io.reactivex.Observable;
@@ -23,12 +23,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
-import ru.yandex.speechkit.Recognizer;
-import ru.yandex.speechkit.Vocalizer;
 
 public class TranslatePresenter {
-    public static final int ORIGINAL_TEXT = 0;
-    public static final int TRANSLATED_TEXT = 1;
 
     private YandexTranslateApi mTranslaterApi = Yandex.TranslateApi.getTranslateApi();
     private YandexDictionaryApi mDictionaryApi = Yandex.DictionaryApi.getDictionaryApi();
@@ -37,13 +33,13 @@ public class TranslatePresenter {
     private DictionaryRvAdapter mRvDictionaryAdapter;
     private Context mContext;
     private Realm mRealm;
-    private RecognizeHelper mRecognizeHelper;
+    private SpeechkitHelper mSpeechkitHelper;
 
     private Disposable mDisposableTranslater;
 
     public TranslatePresenter(Context context, ITranslateFragment fragmentView) {
         mView = fragmentView;
-        mRecognizeHelper = new RecognizeHelper(mView);
+        mSpeechkitHelper = new SpeechkitHelper(mView);
         mRealm = Realm.getDefaultInstance();
         mContext = context;
         initModel(context);
@@ -91,16 +87,12 @@ public class TranslatePresenter {
         mRvDictionaryAdapter.setDictionary(translationInfo.getDictionary());
     }
 
-    public void VocalizeWithOriginalLanguage(String text) {
-        Vocalize(text, mModel.getTranslateFrom());
+    public void vocalizeWithOriginalLanguage(String text) {
+        mSpeechkitHelper.Vocalize(text, mModel.getTranslateFrom());
     }
 
-    public void VocalizeWithResultLanguage(String text) {
-        Vocalize(text, mModel.getTranslateTo());
-    }
-
-    private void Vocalize(String text, Utils.Lang language) {
-        Vocalizer.createVocalizer(language.getCode(), text, true).start();
+    public void vocalizeWithResultLanguage(String text) {
+        mSpeechkitHelper.Vocalize(text, mModel.getTranslateTo());
     }
 
     private void storeTranslation(TranslationInfo translationInfo) {
@@ -116,6 +108,7 @@ public class TranslatePresenter {
     public void dismiss() {
         dispose();
         storeSetting();
+        mSpeechkitHelper.dismiss();
     }
 
     private void dispose() {
@@ -153,6 +146,6 @@ public class TranslatePresenter {
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        Recognizer.create(mModel.getTranslateFrom().getCode(), Recognizer.Model.NOTES, mRecognizeHelper, false).start();
+        mSpeechkitHelper.startRecognize(mModel.getTranslateFrom().getCode());
     }
 }

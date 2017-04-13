@@ -93,8 +93,8 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
 
     private void setListeners() {
         btnSwitchLang.setOnClickListener(view -> mPresenter.switchLang());
-        ibVocalizeOrigin.setOnClickListener(view -> mPresenter.VocalizeWithOriginalLanguage(mTranslateText.getText().toString()));
-        ibVocalizeTranslated.setOnClickListener(view -> mPresenter.VocalizeWithResultLanguage(mTranslatedText.getText().toString()));
+        ibVocalizeOrigin.setOnClickListener(view -> mPresenter.vocalizeWithOriginalLanguage(mTranslateText.getText().toString()));
+        ibVocalizeTranslated.setOnClickListener(view -> mPresenter.vocalizeWithResultLanguage(mTranslatedText.getText().toString()));
         ibRecognize.setOnClickListener(view -> mPresenter.startRecognizeInput());
     }
 

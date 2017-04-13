@@ -22,6 +22,10 @@ import butterknife.ButterKnife;
 
 public class PagerFragment extends Fragment implements TabLayout.OnTabSelectedListener {
 
+    private static final int HISTORY_FRAGMENT_POSITION = 0;
+    private static final int TRANSLATE_FRAGMENT_POSITION = 1;
+    private static final int SETTINGS_FRAGMENT_POSITION = 2;
+
     @BindView(R.id.view_pager)
     ViewPager viewPager;
 
@@ -61,9 +65,9 @@ public class PagerFragment extends Fragment implements TabLayout.OnTabSelectedLi
         mTabLayout.setupWithViewPager(viewPager);
         mTabLayout.addOnTabSelectedListener(this);
 
-        setTabIconParams(mTabLayout, 0, R.drawable.ic_bookmark_white_24dp);
-        setTabIconParams(mTabLayout, 1, R.drawable.ic_translate_white_24dp);
-        setTabIconParams(mTabLayout, 2, R.drawable.ic_settings_white_24dp);
+        setTabIconParams(mTabLayout, HISTORY_FRAGMENT_POSITION, R.drawable.ic_bookmark_white_24dp);
+        setTabIconParams(mTabLayout, TRANSLATE_FRAGMENT_POSITION, R.drawable.ic_translate_white_24dp);
+        setTabIconParams(mTabLayout, SETTINGS_FRAGMENT_POSITION, R.drawable.ic_settings_white_24dp);
 
         viewPager.setCurrentItem(1);
     }
