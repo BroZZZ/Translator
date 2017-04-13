@@ -46,6 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:padding="10dp"
                     android:background="@null"
                     android:src="@drawable/ic_volume_up_black_24dp" />
 
@@ -53,7 +54,7 @@
                     android:id="@+id/ib_recognize"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+                    android:padding="10dp"
                     android:layout_weight="1"
                     android:background="@null"
                     android:src="@drawable/ic_mic_black_24dp" />
@@ -65,7 +66,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-
             android:layout_below="@id/translate_form_container"
             android:orientation="vertical">
 
@@ -74,7 +74,7 @@
                 android:id="@+id/ib_vocalize_translated"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:padding="10dp"
                 android:layout_weight="1"
                 android:background="@null"
                 android:src="@drawable/ic_volume_up_black_24dp" />
@@ -86,6 +86,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@null"
+                android:visibility="gone"
                 android:src="@drawable/ic_bookmark_black_24dp" />
 
         </LinearLayout>
