@@ -1,11 +1,13 @@
 package com.translator.brozzz.translator.model;
 
+import com.translator.brozzz.translator.entity.TranslationInfo;
 import com.translator.brozzz.translator.utils.Utils;
 
 public class TranslateModel {
 
     private Utils.Lang translateFrom;
     private Utils.Lang translateTo;
+    private TranslationInfo translationInfo;
 
     public TranslateModel(String translateFrom, String translateTo) {
         if (!translateFrom.isEmpty() && !translateTo.isEmpty()) {
@@ -29,5 +31,13 @@ public class TranslateModel {
 
     public Utils.Lang getTranslateTo() {
         return translateTo;
+    }
+
+    public TranslationInfo getTranslationInfo() {
+        return translationInfo;
+    }
+
+    public void setTranslationInfo(TranslationInfo translationInfo) {
+        this.translationInfo = translationInfo;
     }
 }
