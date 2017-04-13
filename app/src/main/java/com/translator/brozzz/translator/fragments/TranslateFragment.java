@@ -168,7 +168,7 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
 
     @Override
     public void onRecognizeDone() {
-        ibRecognize.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorSelectedTab));
+        ibRecognize.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorBlack));
     }
 
     @Override
@@ -182,9 +182,9 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
     @Override
     public void onVocalizeEnd(int textTypeId) {
         if (textTypeId == ORIGINAL_TEXT)
-            ibVocalizeOrigin.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorSelectedTab));
+            ibVocalizeOrigin.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorBlack));
         else
-            ibVocalizeTranslated.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorSelectedTab));
+            ibVocalizeTranslated.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorBlack));
     }
 
     private void initRv() {
