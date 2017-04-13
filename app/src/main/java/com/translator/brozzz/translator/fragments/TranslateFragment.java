@@ -169,7 +169,6 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
     @Override
     public void onRecognizeDone() {
         ibRecognize.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorSelectedTab));
-
     }
 
     @Override

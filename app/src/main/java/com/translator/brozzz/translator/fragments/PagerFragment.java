@@ -1,6 +1,5 @@
 package com.translator.brozzz.translator.fragments;
 
-import android.databinding.DataBindingUtil;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
@@ -9,23 +8,28 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.translator.brozzz.translator.R;
 import com.translator.brozzz.translator.adapters.MainPagerAdapter;
-import com.translator.brozzz.translator.databinding.FragmentPagerBinding;
 import com.translator.brozzz.translator.fragments.history.HistoryPagerFragment;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class PagerFragment extends Fragment implements TabLayout.OnTabSelectedListener {
 
-    private static final int HISTORY_PAGER_FRAGMENT_POSITION = 0;
+    private static final int HISTORY_FRAGMENT_POSITION = 0;
     private static final int TRANSLATE_FRAGMENT_POSITION = 1;
     private static final int SETTINGS_FRAGMENT_POSITION = 2;
 
-    private FragmentPagerBinding mPagerBinding;
-    private MainPagerAdapter mainPagerAdapter;
+    @BindView(R.id.view_pager)
+    ViewPager viewPager;
+
+    MainPagerAdapter mainPagerAdapter;
 
     private TabLayout mTabLayout;
 
@@ -37,7 +41,7 @@ public class PagerFragment extends Fragment implements TabLayout.OnTabSelectedLi
             mainPagerAdapter.addFragment(new TranslateFragment());
             mainPagerAdapter.addFragment(new SettingFragment());
         }
-        mPagerBinding.viewPager.setAdapter(mainPagerAdapter);
+        viewPager.setAdapter(mainPagerAdapter);
     }
 
     @Override
@@ -49,22 +53,23 @@ public class PagerFragment extends Fragment implements TabLayout.OnTabSelectedLi
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mPagerBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_pager, container, false);
+        View view = inflater.inflate(R.layout.fragment_pager, container, false);
+        ButterKnife.bind(this, view);
         initViewPager();
         initTabBar();
-        return mPagerBinding.getRoot();
+        return view;
     }
 
     private void initTabBar() {
         mTabLayout = (TabLayout) getActivity().findViewById(R.id.tabs);
-        mTabLayout.setupWithViewPager(mPagerBinding.viewPager);
+        mTabLayout.setupWithViewPager(viewPager);
         mTabLayout.addOnTabSelectedListener(this);
 
-        setTabIconParams(mTabLayout, HISTORY_PAGER_FRAGMENT_POSITION, R.drawable.ic_bookmark_white_24dp);
+        setTabIconParams(mTabLayout, HISTORY_FRAGMENT_POSITION, R.drawable.ic_bookmark_white_24dp);
         setTabIconParams(mTabLayout, TRANSLATE_FRAGMENT_POSITION, R.drawable.ic_translate_white_24dp);
         setTabIconParams(mTabLayout, SETTINGS_FRAGMENT_POSITION, R.drawable.ic_settings_white_24dp);
 
-        mPagerBinding.viewPager.setCurrentItem(1);
+        viewPager.setCurrentItem(1);
     }
 
     @SuppressWarnings({"ConstantConditions", "deprecation"})

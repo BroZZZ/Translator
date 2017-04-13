@@ -1,140 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="5dp"
+    android:background="@android:color/white">
 
-    <data>
-
-        <variable
-            name="translatePresenter"
-            type="com.translator.brozzz.translator.presenter.TranslatePresenter" />
-    </data>
+    <FrameLayout
+        android:id="@+id/action_bar_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="5dp"
-        android:background="@android:color/white">
-
-        <FrameLayout
-            android:id="@+id/action_bar_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        android:layout_below="@id/action_bar_container"
+        android:layout_margin="8dp">
 
         <RelativeLayout
+            android:id="@+id/translate_form_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/action_bar_container"
-            android:layout_margin="8dp">
+            android:layout_height="120dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/white_background_with_border"
+            android:gravity="top|start">
 
-            <RelativeLayout
-                android:id="@+id/translate_form_container"
+            <EditText
+                android:id="@+id/translate_text"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/white_background_with_border"
-                android:gravity="top|start">
-
-                <EditText
-                    android:id="@+id/translate_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:layout_toStartOf="@+id/translate_control_container"
-                    android:background="@android:color/transparent"
-                    android:gravity="top|start"
-                    android:hint="write your text here "
-                    android:inputType="textMultiLine" />
-
-                <LinearLayout
-                    android:id="@+id/translate_control_container"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
-                    android:orientation="vertical">
-
-                    <ImageButton
-                        android:id="@+id/ib_vocalize"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@null"
-                        android:onClick="@{() -&gt; translatePresenter.vocalizeOriginalText()}"
-                        android:src="@drawable/ic_volume_up_black_24dp" />
-
-                    <ImageButton
-                        android:id="@+id/ib_recognize"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:onClick="@{() -&gt; translatePresenter.startRecognizeInput()}"
-                        android:layout_weight="1"
-                        android:background="@null"
-                        android:src="@drawable/ic_mic_black_24dp" />
-                </LinearLayout>
-            </RelativeLayout>
+                android:layout_toStartOf="@+id/translate_control_container"
+                android:background="@android:color/transparent"
+                android:gravity="top|start"
+                android:hint="write your text here "
+                android:inputType="textMultiLine" />
 
             <LinearLayout
-                android:id="@+id/control_translate_result_container"
+                android:id="@+id/translate_control_container"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@id/translate_form_container"
                 android:orientation="vertical">
 
-
                 <ImageButton
-                    android:id="@+id/ib_vocalize_translated"
+                    android:id="@+id/ib_vocalize"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:onClick="@{() -&gt; translatePresenter.vocalizeTranslatedText()}"
                     android:src="@drawable/ic_volume_up_black_24dp" />
 
                 <ImageButton
-                    android:id="@+id/ib_favorite"
+                    android:id="@+id/ib_recognize"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+
                     android:layout_weight="1"
                     android:background="@null"
-                    android:onClick="@{() -&gt; translatePresenter.addCurrentTranslationToFavorite()}"
-                    android:src="@drawable/ic_bookmark_black_24dp" />
-
+                    android:src="@drawable/ic_mic_black_24dp" />
             </LinearLayout>
+        </RelativeLayout>
 
-            <RelativeLayout
-                android:id="@+id/translate_result_container"
+        <LinearLayout
+            android:id="@+id/control_translate_result_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+
+            android:layout_below="@id/translate_form_container"
+            android:orientation="vertical">
+
+
+            <ImageButton
+                android:id="@+id/ib_vocalize_translated"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:src="@drawable/ic_volume_up_black_24dp" />
+
+            <ImageButton
+                android:id="@+id/ib_favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:src="@drawable/ic_bookmark_black_24dp" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/translate_result_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/translate_form_container"
+            android:layout_marginStart="5dp"
+            android:layout_toStartOf="@id/control_translate_result_container">
+
+            <TextView
+                android:id="@+id/translated_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp" />
+
+            <TextView
+                android:id="@+id/original_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/translated_text"
+                android:layout_marginBottom="5dp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/dictionary_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_below="@id/translate_form_container"
-                android:layout_marginStart="5dp"
-                android:layout_toStartOf="@id/control_translate_result_container">
+                android:layout_below="@id/original_text">
 
-                <TextView
-                    android:id="@+id/translated_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp" />
-
-                <TextView
-                    android:id="@+id/original_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/translated_text"
-                    android:layout_marginBottom="5dp" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/dictionary_rv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_below="@id/original_text">
-
-                </android.support.v7.widget.RecyclerView>
-            </RelativeLayout>
-
-
+            </android.support.v7.widget.RecyclerView>
         </RelativeLayout>
 
+
     </RelativeLayout>
-</layout>
+
+</RelativeLayout>

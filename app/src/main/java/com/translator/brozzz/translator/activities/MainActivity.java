@@ -10,12 +10,15 @@ import android.support.v7.app.AppCompatActivity;
 import com.translator.brozzz.translator.R;
 import com.translator.brozzz.translator.fragments.PagerFragment;
 
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         if (savedInstanceState == null) {
             setCurrentFragment(new PagerFragment(), false, null);
         }
