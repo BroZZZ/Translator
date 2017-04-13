@@ -81,11 +81,9 @@ public class HistoryPagerFragment extends Fragment implements TabLayout.OnTabSel
 
     @Override
     public void onTabUnselected(TabLayout.Tab tab) {
-
     }
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
-
     }
 }

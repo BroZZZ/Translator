@@ -10,4 +10,12 @@ public interface ITranslateFragment {
 
     void setPartialRecognizedText(String text);
 
+    void onRecognizeStart();
+
+    void onRecognizeDone();
+
+    void onVocalizeStart(int textTypeId);
+
+    void onVocalizeEnd(int textTypeId);
+
 }

@@ -3,6 +3,7 @@ package com.translator.brozzz.translator.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,16 +26,21 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
+import static com.translator.brozzz.translator.R.id.ib_favorite;
+
 public class TranslateFragment extends Fragment implements ITranslateFragment {
 
+    public static final int ORIGINAL_TEXT = 0;
+    public static final int TRANSLATED_TEXT = 1;
+
     @BindView(R.id.translate_text)
-    EditText mTranslateText;
+    EditText etOriginalText;
 
     @BindView(R.id.translated_text)
-    TextView mTranslatedText;
+    TextView tvTranslatedText;
 
     @BindView(R.id.original_text)
-    TextView mOriginalText;
+    TextView tvOriginalText;
 
     @BindView(R.id.dictionary_rv)
     RecyclerView dictionaryRv;
@@ -46,7 +52,7 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
     TextView tvTranslateTo;
 
     @BindView(R.id.btn_switch_lang)
-    ImageButton btnSwitchLang;
+    ImageButton ibSwitchLang;
 
     @BindView(R.id.ib_vocalize)
     ImageButton ibVocalizeOrigin;
@@ -54,7 +60,7 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
     @BindView(R.id.ib_vocalize_translated)
     ImageButton ibVocalizeTranslated;
 
-    @BindView(R.id.ib_favorite)
+    @BindView(ib_favorite)
     ImageButton ibFavorite;
 
     @BindView(R.id.ib_recognize)
@@ -85,24 +91,12 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
         return view;
     }
 
-    private void initRv() {
-        dictionaryRv.setAdapter(mPresenter.getRvDictionaryAdapter());
-        dictionaryRv.setItemAnimator(new DefaultItemAnimator());
-        dictionaryRv.setLayoutManager(new LinearLayoutManager(getActivity()));
-    }
-
-    private void setListeners() {
-        btnSwitchLang.setOnClickListener(view -> mPresenter.switchLang());
-        ibVocalizeOrigin.setOnClickListener(view -> mPresenter.vocalizeWithOriginalLanguage(mTranslateText.getText().toString()));
-        ibVocalizeTranslated.setOnClickListener(view -> mPresenter.vocalizeWithResultLanguage(mTranslatedText.getText().toString()));
-        ibRecognize.setOnClickListener(view -> mPresenter.startRecognizeInput());
-    }
 
     @Override
     public void onResume() {
         super.onResume();
         mDisposableChangeText = RxTextView
-                .textChanges(mTranslateText)
+                .textChanges(etOriginalText)
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .map(text -> text.toString().trim())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -120,7 +114,8 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
     @Override
     public void onPause() {
         super.onPause();
-
+        if (!mDisposableChangeText.isDisposed())
+            mDisposableChangeText.dispose();
     }
 
     @Override
@@ -131,44 +126,83 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
 
     @Override
     public void displayTranslateResult(String originalText, String translatedText) {
-        mOriginalText.setText(originalText);
-        mTranslatedText.setText(translatedText);
+        tvOriginalText.setText(originalText);
+        tvTranslatedText.setText(translatedText);
     }
 
     @Override
     public void setFinalRecognizedText(String text) {
-        int selectionStart = mTranslateText.getSelectionStart();
-        int selectionEnd = mTranslateText.getSelectionEnd();
-        StringBuilder textBuilder = new StringBuilder(mTranslateText.getText().toString());
+        int selectionStart = etOriginalText.getSelectionStart();
+        int selectionEnd = etOriginalText.getSelectionEnd();
+        StringBuilder textBuilder = new StringBuilder(etOriginalText.getText().toString());
         textBuilder.delete(selectionStart, selectionEnd);
         textBuilder.insert(selectionStart, text);
         selectionEnd = selectionStart + text.length();
 
-        mTranslateText.setText(textBuilder.toString());
-        mTranslateText.setSelection(selectionEnd);
+        etOriginalText.setText(textBuilder.toString());
+        etOriginalText.setSelection(selectionEnd);
     }
 
     @Override
     public void setPartialRecognizedText(String text) {
-        int selectionStart = mTranslateText.getSelectionStart();
-        int selectionEnd = mTranslateText.getSelectionEnd();
-        StringBuilder textBuilder = new StringBuilder(mTranslateText.getText().toString());
+        int selectionStart = etOriginalText.getSelectionStart();
+        int selectionEnd = etOriginalText.getSelectionEnd();
+        StringBuilder textBuilder = new StringBuilder(etOriginalText.getText().toString());
         if (selectionStart == selectionEnd) {
             textBuilder.insert(selectionStart, text);
-            selectionEnd = mTranslateText.length() + text.length();
+            selectionEnd = etOriginalText.length() + text.length();
         } else {
             textBuilder.delete(selectionStart, selectionEnd);
             textBuilder.insert(selectionStart, text);
             selectionEnd = selectionStart + text.length();
         }
 
-        mTranslateText.setText(textBuilder.toString());
-        mTranslateText.setSelection(selectionStart, selectionEnd);
+        etOriginalText.setText(textBuilder.toString());
+        etOriginalText.setSelection(selectionStart, selectionEnd);
+    }
+
+    @Override
+    public void onRecognizeStart() {
+        ibRecognize.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+    }
+
+    @Override
+    public void onRecognizeDone() {
+        ibRecognize.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorSelectedTab));
+    }
+
+    @Override
+    public void onVocalizeStart(int textTypeId) {
+        if (textTypeId == ORIGINAL_TEXT)
+            ibVocalizeOrigin.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+        else
+            ibVocalizeTranslated.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+    }
+
+    @Override
+    public void onVocalizeEnd(int textTypeId) {
+        if (textTypeId == ORIGINAL_TEXT)
+            ibVocalizeOrigin.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorSelectedTab));
+        else
+            ibVocalizeTranslated.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorSelectedTab));
+    }
+
+    private void initRv() {
+        dictionaryRv.setAdapter(mPresenter.getRvDictionaryAdapter());
+        dictionaryRv.setItemAnimator(new DefaultItemAnimator());
+        dictionaryRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
+    private void setListeners() {
+        ibSwitchLang.setOnClickListener(view -> mPresenter.switchLang());
+        ibVocalizeOrigin.setOnClickListener(view -> mPresenter.vocalize(etOriginalText.getText().toString(), ORIGINAL_TEXT));
+        ibVocalizeTranslated.setOnClickListener(view -> mPresenter.vocalize(tvTranslatedText.getText().toString(), TRANSLATED_TEXT));
+        ibRecognize.setOnClickListener(view -> mPresenter.startRecognizeInput());
     }
 
     private void clearText() {
-        mOriginalText.setText("");
-        mTranslatedText.setText("");
+        tvOriginalText.setText("");
+        tvTranslatedText.setText("");
     }
 
     public void updateActionBar() {
