@@ -22,12 +22,12 @@ public class SpeechkitHelper implements RecognizerListener, VocalizerListener {
         mDestinationView = destinationView;
     }
 
-    public void Vocalize(String text, Utils.Lang language, int textTypeId) {
+    public void Vocalize(String text, Utils.Lang language, int textTypeId, String voice) {
 
         dismiss();
 
         this.textTypeId = textTypeId;
-        vocalizer = Vocalizer.createVocalizer(language.getCode(), text, true);
+        vocalizer = Vocalizer.createVocalizer(language.getCode(), text, true, voice);
         vocalizer.setListener(this);
         vocalizer.start();
     }

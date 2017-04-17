@@ -92,9 +92,9 @@ public class TranslatePresenter {
 
     public void vocalize(String text, int textTypeId) {
         if (textTypeId == TranslateFragment.ORIGINAL_TEXT)
-            mSpeechkitHelper.Vocalize(text, mModel.getTranslateFrom(), textTypeId);
+            mSpeechkitHelper.Vocalize(text, mModel.getTranslateFrom(), textTypeId, settingsModel.getVocalizeVoice());
         else {
-            mSpeechkitHelper.Vocalize(text, mModel.getTranslateTo(), textTypeId);
+            mSpeechkitHelper.Vocalize(text, mModel.getTranslateTo(), textTypeId, settingsModel.getVocalizeVoice());
         }
     }
 

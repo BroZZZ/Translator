@@ -52,4 +52,10 @@ public class SettingPresenter {
         }
         updateSettings();
     }
+
+    public void updateVoiceSetting(String voice) {
+        mRealm.beginTransaction();
+        mModel.setVocalizeVoice(voice);
+        mRealm.commitTransaction();
+    }
 }

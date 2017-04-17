@@ -15,7 +15,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.translator.brozzz.translator.R;
@@ -29,10 +32,15 @@ public class SettingFragment extends Fragment implements ISettingFragment {
 
     @BindView(R.id.et_millisecond)
     EditText mEtMillisecond;
+
     @BindView(R.id.sc_trastale_on_fly)
     SwitchCompat mSwitchTranslateOnFly;
+
     @BindView(R.id.tv_delay_before_translate)
     TextView mTvDelayText;
+
+    @BindView(R.id.spinner_voice)
+    Spinner mSpinnerVoice;
 
     private SettingPresenter mPresenter;
 
@@ -49,7 +57,15 @@ public class SettingFragment extends Fragment implements ISettingFragment {
         ViewGroup insertPoint = (ViewGroup) view.findViewById(R.id.action_bar_container);
         inflater.inflate(R.layout.setting_action_bar, insertPoint, true);
         ButterKnife.bind(this, view);
+        initSpinner();
         return view;
+    }
+
+    private void initSpinner() {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.vocalize_voices, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinnerVoice.setAdapter(adapter);
     }
 
     private void setListeners() {
@@ -84,13 +100,24 @@ public class SettingFragment extends Fragment implements ISettingFragment {
 
         });
 
+        mSpinnerVoice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                mPresenter.updateVoiceSetting(adapterView.getItemAtPosition(i).toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
     }
 
     @Override
     public void updateSettingView(boolean isTranslateOnFlyOn, int delay, String Voice) {
         mSwitchTranslateOnFly.setChecked(isTranslateOnFlyOn);
         mEtMillisecond.setText(String.valueOf(delay));
-
+        mSpinnerVoice.setSelection(((ArrayAdapter) mSpinnerVoice.getAdapter()).getPosition(Voice));
         if (isTranslateOnFlyOn) {
             changeEditTextStyle(InputType.TYPE_CLASS_NUMBER, R.color.colorBlack);
         } else {

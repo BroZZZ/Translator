@@ -8,7 +8,7 @@ public class SettingsModel extends RealmObject {
     private int id = 2000; //yandex foundation year
     boolean isTransleOnFlyOn;
     int delayBeforeTranslate = 500;
-    String vocalizeVoice;
+    String vocalizeVoice = "Alyss";
 
 
     public SettingsModel() {

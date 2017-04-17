@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">Translator</string>
     <string name="translate_error">Something went wrong. Try again later</string>
+
+    <string-array name="vocalize_voices">
+        <item>Alyss</item>
+        <item>Ermil</item>
+        <item>Jane</item>
+        <item>Omazh</item>
+        <item>Zahar</item>
+    </string-array>
+
 </resources>

@@ -98,7 +98,7 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
         mPresenter.init();
         mDisposableChangeText = RxTextView
                 .textChanges(etOriginalText)
-                .debounce(500, TimeUnit.MILLISECONDS)
+                .debounce(mPresenter.getDelayBeforeTranslate(), TimeUnit.MILLISECONDS)
                 .map(text -> text.toString().trim())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(s ->

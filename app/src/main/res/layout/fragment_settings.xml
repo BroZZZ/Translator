@@ -49,10 +49,15 @@
                 android:inputType="number" />
         </LinearLayout>
 
-        <TextView
+        <Spinner
+            android:id="@+id/spinner_voice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"/>
     </LinearLayout>
 
 </RelativeLayout>
