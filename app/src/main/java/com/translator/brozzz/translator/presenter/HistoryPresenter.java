@@ -13,30 +13,22 @@ public class HistoryPresenter implements IHistoryActionClickListener {
     private HistoryRvAdapter mRvHistoryAdapter;
     private Context mContext;
     private Realm mRealm;
+    private boolean isOnlyFavorite;
 
     public HistoryPresenter(Context context, boolean onlyFavorite) {
         mContext = context;
+        isOnlyFavorite = onlyFavorite;
         initRealm();
-        initRvAdapter(onlyFavorite);
+        initRvAdapter();
     }
 
     private void initRealm() {
         mRealm = Realm.getDefaultInstance();
     }
 
-    private void initRvAdapter(boolean onlyFavorite) {
-        RealmResults<TranslationInfo> translationInfos;
-        if (onlyFavorite) {
-            translationInfos = mRealm.where(TranslationInfo.class)
-                    .equalTo("isFavourite", true)
-                    .findAll();
-        } else {
-            translationInfos = mRealm.where(TranslationInfo.class)
-                    .findAll();
-        }
-
+    private void initRvAdapter() {
         mRvHistoryAdapter = new HistoryRvAdapter(mContext,
-                translationInfos,
+                null,
                 this);
 
     }
@@ -66,5 +58,28 @@ public class HistoryPresenter implements IHistoryActionClickListener {
             mRvHistoryAdapter.getData().deleteAllFromRealm();
             mRealm.commitTransaction();
         }
+    }
+
+    public void dismiss() {
+        mRealm.close();
+        mRvHistoryAdapter.updateData(null);
+    }
+
+    public void init() {
+        if (mRealm.isClosed()) {
+            mRealm = Realm.getDefaultInstance();
+        }
+        RealmResults<TranslationInfo> translationInfos;
+
+        if (isOnlyFavorite) {
+            translationInfos = mRealm.where(TranslationInfo.class)
+                    .equalTo("isFavourite", isOnlyFavorite)
+                    .findAll();
+        } else {
+            translationInfos = mRealm.where(TranslationInfo.class)
+                    .findAll();
+        }
+        mRvHistoryAdapter.updateData(translationInfos);
+
     }
 }

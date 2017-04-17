@@ -4,30 +4,36 @@ import com.translator.brozzz.translator.utils.Utils;
 
 public class TranslateModel {
 
-    private Utils.Lang translateFrom;
-    private Utils.Lang translateTo;
+    private Utils.Lang mTranslateFrom;
+    private Utils.Lang mTranslateTo;
+    private SettingsModel mSettings;
 
-    public TranslateModel(String translateFrom, String translateTo) {
+    public TranslateModel(String translateFrom, String translateTo, SettingsModel settings) {
         if (!translateFrom.isEmpty() && !translateTo.isEmpty()) {
-            this.translateFrom = Utils.Lang.valueOf(translateFrom);
-            this.translateTo = Utils.Lang.valueOf(translateTo);
+            mTranslateFrom = Utils.Lang.valueOf(translateFrom);
+            mTranslateTo = Utils.Lang.valueOf(translateTo);
         } else {
-            this.translateFrom = Utils.Lang.EN;
-            this.translateTo = Utils.Lang.RU;
+            mTranslateFrom = Utils.Lang.EN;
+            mTranslateTo = Utils.Lang.RU;
         }
+        mSettings = settings;
     }
 
     public void switchLang() {
-        Utils.Lang tmp = translateFrom;
-        translateFrom = translateTo;
-        translateTo = tmp;
+        Utils.Lang tmp = mTranslateFrom;
+        mTranslateFrom = mTranslateTo;
+        mTranslateTo = tmp;
     }
 
     public Utils.Lang getTranslateFrom() {
-        return translateFrom;
+        return mTranslateFrom;
     }
 
     public Utils.Lang getTranslateTo() {
-        return translateTo;
+        return mTranslateTo;
+    }
+
+    public SettingsModel getSettings(){
+        return mSettings;
     }
 }

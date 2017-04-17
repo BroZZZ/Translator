@@ -38,10 +38,16 @@ public class HistoryFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.history_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_history, container, false);
         ButterKnife.bind(this, view);
         initRv();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.init();
     }
 
     public void initRv() {
@@ -52,5 +58,11 @@ public class HistoryFragment extends Fragment {
 
     public void clearData(){
         mPresenter.clearRealmCollection();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mPresenter.dismiss();
     }
 }

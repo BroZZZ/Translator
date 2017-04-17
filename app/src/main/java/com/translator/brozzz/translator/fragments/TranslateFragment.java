@@ -78,7 +78,7 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.translate_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_translate, container, false);
         ViewGroup insertPoint = (ViewGroup) view.findViewById(R.id.action_bar_container);
         inflater.inflate(R.layout.translate_action_bar, insertPoint, true);
         ButterKnife.bind(this, view);
@@ -95,6 +95,7 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
     @Override
     public void onResume() {
         super.onResume();
+        mPresenter.init();
         mDisposableChangeText = RxTextView
                 .textChanges(etOriginalText)
                 .debounce(500, TimeUnit.MILLISECONDS)

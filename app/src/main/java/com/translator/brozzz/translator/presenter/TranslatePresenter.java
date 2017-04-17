@@ -14,6 +14,7 @@ import com.translator.brozzz.translator.fragments.TranslateFragment;
 import com.translator.brozzz.translator.interfaces.ITranslateFragment;
 import com.translator.brozzz.translator.interfaces.YandexDictionaryApi;
 import com.translator.brozzz.translator.interfaces.YandexTranslateApi;
+import com.translator.brozzz.translator.model.SettingsModel;
 import com.translator.brozzz.translator.model.TranslateModel;
 import com.translator.brozzz.translator.network.Yandex;
 import com.translator.brozzz.translator.utils.SpeechkitHelper;
@@ -31,6 +32,7 @@ public class TranslatePresenter {
     private YandexDictionaryApi mDictionaryApi = Yandex.DictionaryApi.getDictionaryApi();
     private ITranslateFragment mView;
     private TranslateModel mModel;
+    private SettingsModel settingsModel;
     private DictionaryRvAdapter mRvDictionaryAdapter;
     private Context mContext;
     private Realm mRealm;
@@ -51,7 +53,7 @@ public class TranslatePresenter {
         SharedPreferences mSettings = context.getSharedPreferences(Utils.SharedPreferences.TRANSLATE_PREFERENCES, Context.MODE_PRIVATE);
         String translateFromSetting = mSettings.getString(Utils.SharedPreferences.TRANSLATE_FROM_PREFERENCE, "");
         String translateToSetting = mSettings.getString(Utils.SharedPreferences.TRANSLATE_TO_PREFERENCE, "");
-        mModel = new TranslateModel(translateFromSetting, translateToSetting);
+        mModel = new TranslateModel(translateFromSetting, translateToSetting, mRealm.where(SettingsModel.class).findFirst());
     }
 
     public void translate(String text) {
@@ -111,7 +113,10 @@ public class TranslatePresenter {
         storeSetting();
         mSpeechkitHelper.dismiss();
     }
-
+    public void init() {
+        if (mRealm.isClosed())
+            mRealm = Realm.getDefaultInstance();
+    }
     private void dispose() {
         if (mDisposableTranslater != null && !mDisposableTranslater.isDisposed())
             mDisposableTranslater.dispose();
@@ -148,5 +153,9 @@ public class TranslatePresenter {
             return;
         }
         mSpeechkitHelper.startRecognize(mModel.getTranslateFrom().getCode());
+    }
+
+    public int getDelayBeforeTranslate(){
+        return mModel.getSettings().getDelayBeforeTranslate();
     }
 }
