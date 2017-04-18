@@ -22,7 +22,7 @@ public class HistoryFragment extends Fragment {
     @BindView(R.id.rv_history)
     RecyclerView mRvHistory;
 
-    private boolean mOnlyFavourite;
+    private boolean mOnlyFavourite;    //if true we store only favorite translation
 
     private HistoryPresenter mPresenter;
 
