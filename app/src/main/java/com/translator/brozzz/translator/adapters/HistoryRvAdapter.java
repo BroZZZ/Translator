@@ -15,6 +15,8 @@ import com.translator.brozzz.translator.R;
 import com.translator.brozzz.translator.entity.TranslationInfo;
 import com.translator.brozzz.translator.interfaces.IHistoryActionClickListener;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
 
@@ -42,26 +44,29 @@ public class HistoryRvAdapter extends RealmRecyclerViewAdapter<TranslationInfo, 
         ((ViewHolder) holder).tv_originalText.setText(translationInfo.getOriginalText());
         ((ViewHolder) holder).tv_translatedText.setText(translationInfo.getTranslation().getTranslatedText());
         ((ViewHolder) holder).tv_lang.setText(translationInfo.getTranslation().getLang().toUpperCase());
-        if (translationInfo.isFavourite()){
+        if (translationInfo.isFavourite()) {
             ((ViewHolder) holder).iv_favorite.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary));
         } else {
             ((ViewHolder) holder).iv_favorite.setColorFilter(ContextCompat.getColor(mContext, R.color.colorUnselectedTab));
         }
     }
 
-    private class ViewHolder extends RecyclerView.ViewHolder {
-
+    class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.tv_original_text)
         TextView tv_originalText;
+
+        @BindView(R.id.tv_translated_text)
         TextView tv_translatedText;
+
+        @BindView(R.id.tv_lang)
         TextView tv_lang;
+
+        @BindView(R.id.iv_favorite)
         ImageView iv_favorite;
 
         ViewHolder(View view) {
             super(view);
-            tv_originalText = (TextView) view.findViewById(R.id.tv_original_text);
-            tv_translatedText = (TextView) view.findViewById(R.id.tv_translated_text);
-            tv_lang = (TextView) view.findViewById(R.id.tv_lang);
-            iv_favorite = (ImageView) view.findViewById(R.id.iv_favorite);
+            ButterKnife.bind(this, view);
             iv_favorite.setOnClickListener(v ->
                     mListener.OnFavoriteClick(tv_originalText.getText().toString()));
         }

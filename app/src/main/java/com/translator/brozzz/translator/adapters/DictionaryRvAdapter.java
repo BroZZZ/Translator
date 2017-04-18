@@ -9,6 +9,9 @@ import android.widget.TextView;
 import com.translator.brozzz.translator.R;
 import com.translator.brozzz.translator.entity.dictionary.Dictionary;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class DictionaryRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Dictionary dictionary;
@@ -47,17 +50,19 @@ public class DictionaryRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return dictionary.getDefinitionSize();
     }
 
-    private class ViewHolder extends RecyclerView.ViewHolder {
-
+    class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.synonyms)
         TextView synonyms;
+
+        @BindView(R.id.mean)
         TextView mean;
+
+        @BindView(R.id.position)
         TextView position;
 
         ViewHolder(View view) {
             super(view);
-            synonyms = (TextView) view.findViewById(R.id.synonyms);
-            mean = (TextView) view.findViewById(R.id.mean);
-            position = (TextView) view.findViewById(R.id.position);
+            ButterKnife.bind(this, view);
         }
     }
 }

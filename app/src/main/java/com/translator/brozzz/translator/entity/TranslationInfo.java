@@ -10,7 +10,7 @@ import io.realm.annotations.PrimaryKey;
 public class TranslationInfo extends RealmObject {
     @PrimaryKey
     @NonNull
-    private String originalText;
+    private String originalText = "";
     private Translation translation;
     private Dictionary dictionary;
     private boolean isFavourite;

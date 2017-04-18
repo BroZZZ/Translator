@@ -32,7 +32,7 @@ public class TranslatePresenter {
     private YandexDictionaryApi mDictionaryApi = Yandex.DictionaryApi.getDictionaryApi();
     private ITranslateFragment mView;
     private TranslateModel mModel;
-    private SettingsModel settingsModel;
+    private SettingsModel mSettingsModel;
     private DictionaryRvAdapter mRvDictionaryAdapter;
     private Context mContext;
     private Realm mRealm;
@@ -42,13 +42,16 @@ public class TranslatePresenter {
 
     public TranslatePresenter(Context context, ITranslateFragment fragmentView) {
         mView = fragmentView;
-        mSpeechkitHelper = new SpeechkitHelper(mView);
         mRealm = Realm.getDefaultInstance();
         mContext = context;
         initModel(context);
         mRvDictionaryAdapter = new DictionaryRvAdapter();
     }
 
+    /**
+     * get last translation languages from shared preferences
+     * @param context
+     */
     private void initModel(Context context) {
         SharedPreferences mSettings = context.getSharedPreferences(Utils.SharedPreferences.TRANSLATE_PREFERENCES, Context.MODE_PRIVATE);
         String translateFromSetting = mSettings.getString(Utils.SharedPreferences.TRANSLATE_FROM_PREFERENCE, "");
@@ -56,6 +59,10 @@ public class TranslatePresenter {
         mModel = new TranslateModel(translateFromSetting, translateToSetting, mRealm.where(SettingsModel.class).findFirst());
     }
 
+    /**
+     * translate text from cache or yandex api
+     * @param text
+     */
     public void translate(String text) {
         mRvDictionaryAdapter.clear();
 
@@ -80,24 +87,42 @@ public class TranslatePresenter {
         else processTranslation(cacheTranslation);
     }
 
+    /**
+     * search text translation in realm db
+     * @param text original text
+     * @return translation info
+     */
     private TranslationInfo findTranslation(String text) {
         return mRealm.where(TranslationInfo.class).equalTo("originalText", text).findFirst();
     }
 
+    /**
+     * process translation and display on view
+     * @param translationInfo processing object
+     */
     private void processTranslation(TranslationInfo translationInfo) {
         storeTranslation(translationInfo);
         mView.displayTranslateResult(translationInfo.getOriginalText(), translationInfo.getTranslation().getTranslatedText());
         mRvDictionaryAdapter.setDictionary(translationInfo.getDictionary());
     }
 
+    /**
+     * Vocalize text
+     * @param text vocalization text
+     * @param textTypeId TranslateFragment const
+     */
     public void vocalize(String text, int textTypeId) {
         if (textTypeId == TranslateFragment.ORIGINAL_TEXT)
-            mSpeechkitHelper.Vocalize(text, mModel.getTranslateFrom(), textTypeId, settingsModel.getVocalizeVoice());
+            mSpeechkitHelper.Vocalize(text, mModel.getTranslateFrom(), textTypeId, mSettingsModel.getVocalizeVoice());
         else {
-            mSpeechkitHelper.Vocalize(text, mModel.getTranslateTo(), textTypeId, settingsModel.getVocalizeVoice());
+            mSpeechkitHelper.Vocalize(text, mModel.getTranslateTo(), textTypeId, mSettingsModel.getVocalizeVoice());
         }
     }
 
+    /**
+     * Store translation info in db
+     * @param translationInfo Saved object
+     */
     private void storeTranslation(TranslationInfo translationInfo) {
         mRealm.beginTransaction();
         mRealm.copyToRealmOrUpdate(translationInfo);
@@ -108,20 +133,42 @@ public class TranslatePresenter {
         return mRvDictionaryAdapter;
     }
 
+    /**
+     * Freeing memory, store model state
+     */
     public void dismiss() {
         dispose();
         storeSetting();
         mSpeechkitHelper.dismiss();
     }
+
+    /**
+     * Initialization of required fields
+     */
     public void init() {
-        if (mRealm.isClosed())
-            mRealm = Realm.getDefaultInstance();
+        if (mRealm.isClosed()) mRealm = Realm.getDefaultInstance();
+        mSpeechkitHelper = new SpeechkitHelper(mView);
+        updateSettings();
     }
+
+    /**
+     * Update setting from db
+     */
+    private void updateSettings(){
+        mSettingsModel = mRealm.where(SettingsModel.class).findFirst();
+    }
+
+    /**
+     * Rx dispose
+     */
     private void dispose() {
         if (mDisposableTranslater != null && !mDisposableTranslater.isDisposed())
             mDisposableTranslater.dispose();
     }
 
+    /**
+     * Store model state
+     */
     private void storeSetting() {
         SharedPreferences mSettings = mContext.getSharedPreferences(Utils.SharedPreferences.TRANSLATE_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = mSettings.edit();
@@ -130,24 +177,42 @@ public class TranslatePresenter {
         editor.apply();
     }
 
+    /**
+     * Set language format for yandex format
+     * @return yandex api laguage param
+     */
     private String getTranslationFormat() {
         return mModel.getTranslateFrom().getCode() + "-" +
                 mModel.getTranslateTo().getCode();
     }
 
+    /**
+     * Switch original and tranlate language
+     */
     public void switchLang() {
         mModel.switchLang();
         mView.updateActionBar();
     }
 
+    /**
+     * Get original language
+     * @return string representation name
+     */
     public String getTranslateFromName() {
         return mModel.getTranslateFrom().getName();
     }
 
+    /**
+     * Get translate language
+     * @return string representation name
+     */
     public String getTranslateToName() {
         return mModel.getTranslateTo().getName();
     }
 
+    /**
+     * Start voice recognize with original language
+     */
     public void startRecognizeInput() {
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -155,6 +220,10 @@ public class TranslatePresenter {
         mSpeechkitHelper.startRecognize(mModel.getTranslateFrom().getCode());
     }
 
+    /**
+     * return delay before auto-translate
+     * @return delay before auto-translate
+     */
     public int getDelayBeforeTranslate(){
         return mModel.getSettings().getDelayBeforeTranslate();
     }

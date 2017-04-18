@@ -18,13 +18,6 @@ public class SettingPresenter {
     }
 
     private void updateSettings() {
-        if (mModel == null) {
-            mModel = new SettingsModel();
-            mRealm.beginTransaction();
-            mRealm.copyToRealmOrUpdate(mModel);
-            mRealm.commitTransaction();
-        }
-
         mView.updateSettingView(mModel.isTransleOnFlyOn(),
                 mModel.getDelayBeforeTranslate(),
                 mModel.getVocalizeVoice());
