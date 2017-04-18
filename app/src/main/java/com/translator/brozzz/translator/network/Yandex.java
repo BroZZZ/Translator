@@ -20,7 +20,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Yandex {
-
+    public static final String SPEECHKIT_KEY = "846dd4ec-a55b-4868-9640-42c72a278a19";
     public static class TranslateApi {
         public static final String TRANSLATOR_API_KEY = "trnsl.1.1.20170321T091507Z.5d4a62eb8c8c758d.19a4223d1dc1019da69006bc80e17685d394c534";
         private static final String TRANSLATOR_API_BASE_URL = "https://translate.yandex.net/";

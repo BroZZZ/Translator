@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import com.translator.brozzz.translator.R;
 import com.translator.brozzz.translator.adapters.HistoryTabPagerAdapter;
+import com.translator.brozzz.translator.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,7 +58,7 @@ public class HistoryPagerFragment extends Fragment implements TabLayout.OnTabSel
             historyTabPagerAdapter.addFragment(new HistoryFragment());
 
             Bundle favoriteBundle = new Bundle();
-            favoriteBundle.putBoolean("onlyFavorite", true);
+            favoriteBundle.putBoolean(Utils.IntentExtras.FAVORITE_ONLY, true);
             HistoryFragment favourite = new HistoryFragment();
             favourite.setArguments(favoriteBundle);
             historyTabPagerAdapter.addFragment(favourite);
@@ -68,15 +69,13 @@ public class HistoryPagerFragment extends Fragment implements TabLayout.OnTabSel
     protected void initTabBar() {
         mTabLayout.setupWithViewPager(viewPager);
         mTabLayout.addOnTabSelectedListener(this);
-        mTabLayout.getTabAt(0).setText("History");
-        mTabLayout.getTabAt(1).setText("Favorite");
+        mTabLayout.getTabAt(0).setText(getString(R.string.history_title));
+        mTabLayout.getTabAt(1).setText(getString(R.string.favorite_title));
         onTabSelected(mTabLayout.getTabAt(0));
     }
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        HistoryFragment selectedTab = historyTabPagerAdapter.getHistoryItem(tab.getPosition());
-
     }
 
     @Override

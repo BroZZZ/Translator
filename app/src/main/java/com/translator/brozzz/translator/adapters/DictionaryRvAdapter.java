@@ -47,7 +47,7 @@ public class DictionaryRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return dictionary.getDefinitionSize();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    private class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView synonyms;
         TextView mean;

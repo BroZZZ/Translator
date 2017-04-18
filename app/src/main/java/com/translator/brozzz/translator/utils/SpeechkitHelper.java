@@ -78,11 +78,9 @@ public class SpeechkitHelper implements RecognizerListener, VocalizerListener {
 
     }
 
-
     /*
     RecognizerListener implementation
      */
-
     @Override
     public void onRecordingBegin(Recognizer recognizer) {
         mDestinationView.onRecognizeStart();

@@ -7,9 +7,9 @@ import io.realm.Realm;
 
 
 public class SettingPresenter {
-    SettingsModel mModel;
-    ISettingFragment mView;
-    Realm mRealm;
+    private SettingsModel mModel;
+    private ISettingFragment mView;
+    private Realm mRealm;
 
     public SettingPresenter(ISettingFragment view) {
         mView = view;

@@ -11,11 +11,10 @@ public class Utils {
         public static final String TRANSLATE_FROM_PREFERENCE = "com.translator.brozzz.preferences.pref.translate_from";
         public static final String TRANSLATE_TO_PREFERENCE = "com.translator.brozzz.preferences.pref.translate_to";
     }
-    public enum VocalizeTextType {
-        ORIGINAL_TEXT,
-        TRANSLATED_TEXT
-    }
 
+    public static class IntentExtras{
+        public static final String FAVORITE_ONLY = "com.translator.brozz.translator.extra.FAVORITE_ONLY";
+    }
 
     public enum Lang {
         RU("Русский", "ru"),

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.translator.brozzz.translator.R;
 import com.translator.brozzz.translator.presenter.HistoryPresenter;
+import com.translator.brozzz.translator.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,7 +31,7 @@ public class HistoryFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            mOnlyFavourite = bundle.getBoolean("onlyFavorite", false);
+            mOnlyFavourite = bundle.getBoolean(Utils.IntentExtras.FAVORITE_ONLY, false);
         }
         mPresenter = new HistoryPresenter(getContext(), mOnlyFavourite);
     }

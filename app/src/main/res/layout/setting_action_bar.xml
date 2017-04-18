@@ -12,6 +12,6 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:textSize="28sp"
-        android:text="Settings"/>
+        android:text="@string/settings"/>
 
 </LinearLayout>

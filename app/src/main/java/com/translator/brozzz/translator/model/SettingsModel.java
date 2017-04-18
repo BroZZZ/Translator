@@ -2,13 +2,14 @@ package com.translator.brozzz.translator.model;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import ru.yandex.speechkit.Vocalizer;
 
 public class SettingsModel extends RealmObject {
     @PrimaryKey
     private int id = 2000; //yandex foundation year
     boolean isTransleOnFlyOn;
     int delayBeforeTranslate = 500;
-    String vocalizeVoice = "Alyss";
+    String vocalizeVoice = Vocalizer.Voice.ALYSS;
 
 
     public SettingsModel() {
