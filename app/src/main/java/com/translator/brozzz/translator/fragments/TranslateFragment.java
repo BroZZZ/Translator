@@ -133,6 +133,7 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
 
     @Override
     public void setFinalRecognizedText(String text) {
+        //edit text cursor and selection game
         int selectionStart = etOriginalText.getSelectionStart();
         int selectionEnd = etOriginalText.getSelectionEnd();
         StringBuilder textBuilder = new StringBuilder(etOriginalText.getText().toString());
@@ -146,6 +147,7 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
 
     @Override
     public void setPartialRecognizedText(String text) {
+        //edit text cursor and selection game
         int selectionStart = etOriginalText.getSelectionStart();
         int selectionEnd = etOriginalText.getSelectionEnd();
         StringBuilder textBuilder = new StringBuilder(etOriginalText.getText().toString());
@@ -164,16 +166,19 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
 
     @Override
     public void onRecognizeStart() {
+        //change icon color when recognize
         ibRecognize.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary));
     }
 
     @Override
     public void onRecognizeDone() {
+        //change icon color when recognize done
         ibRecognize.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorBlack));
     }
 
     @Override
-    public void onVocalizeStart(int textTypeId) {
+    public void onVocalizationStart(int textTypeId) {
+        //change icon color when vocalization start
         if (textTypeId == ORIGINAL_TEXT)
             ibVocalizeOrigin.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         else
@@ -181,7 +186,8 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
     }
 
     @Override
-    public void onVocalizeEnd(int textTypeId) {
+    public void onVocalizationEnd(int textTypeId) {
+        //change icon color when vocalization done
         if (textTypeId == ORIGINAL_TEXT)
             ibVocalizeOrigin.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorBlack));
         else
@@ -201,6 +207,9 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
         ibRecognize.setOnClickListener(view -> mPresenter.startRecognizeInput());
     }
 
+    /**
+     * Clear text view for original and translated text
+     */
     private void clearText() {
         tvOriginalText.setText("");
         tvTranslatedText.setText("");

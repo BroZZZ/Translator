@@ -24,6 +24,9 @@ public class YaTranslator extends Application {
         initDefaultSetting();
     }
 
+    /**
+     * Initialization default setting
+     */
     private void initDefaultSetting() {
         Realm realm = Realm.getDefaultInstance();
         if (realm.where(SettingsModel.class).findFirst() == null){

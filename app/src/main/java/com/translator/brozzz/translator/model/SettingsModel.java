@@ -6,11 +6,10 @@ import ru.yandex.speechkit.Vocalizer;
 
 public class SettingsModel extends RealmObject {
     @PrimaryKey
-    private int id = 2000; //yandex foundation year
-    boolean isTransleOnFlyOn;
-    int delayBeforeTranslate = 500;
-    String vocalizeVoice = Vocalizer.Voice.ALYSS;
-
+    private int id = 2000; //yandex company foundation year, default value
+    private boolean isTransleOnFlyOn;
+    private int delayBeforeTranslate = 500;
+    private String vocalizeVoice = Vocalizer.Voice.ALYSS;
 
     public SettingsModel() {
     }

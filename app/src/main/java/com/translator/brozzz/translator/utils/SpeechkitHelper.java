@@ -77,13 +77,13 @@ public class SpeechkitHelper implements RecognizerListener, VocalizerListener {
     @Override
     public void onPlayingBegin(Vocalizer vocalizer) {
         mIsVocalizeNow = true;
-        mDestinationView.onVocalizeStart(textTypeId);
+        mDestinationView.onVocalizationStart(textTypeId);
     }
 
     @Override
     public void onPlayingDone(Vocalizer vocalizer) {
         mIsVocalizeNow = false;
-        mDestinationView.onVocalizeEnd(textTypeId);
+        mDestinationView.onVocalizationEnd(textTypeId);
     }
 
     @Override

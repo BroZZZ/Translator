@@ -21,12 +21,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Yandex {
     public static final String SPEECHKIT_KEY = "846dd4ec-a55b-4868-9640-42c72a278a19";
+
     public static class TranslateApi {
         public static final String TRANSLATOR_API_KEY = "trnsl.1.1.20170321T091507Z.5d4a62eb8c8c758d.19a4223d1dc1019da69006bc80e17685d394c534";
         private static final String TRANSLATOR_API_BASE_URL = "https://translate.yandex.net/";
+
         private static final Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Translation.class, new TranslationDeserializer())
                 .create();
+
         private static YandexTranslateApi yandexTranslateApi = new Retrofit.Builder()
                 .baseUrl(TranslateApi.TRANSLATOR_API_BASE_URL) //Базовая часть адреса
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -40,7 +43,12 @@ public class Yandex {
 
     }
 
+    /**
+     * Deserializer for Yandex Dictionary API for more comfortable work.
+     * It gets only the necessary data
+     */
     private static class TranslationDeserializer implements JsonDeserializer<Translation> {
+
         @Override
         public Translation deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             String lang = json.getAsJsonObject().get("lang").getAsString();
@@ -59,17 +67,20 @@ public class Yandex {
                 .create();
 
         private static YandexDictionaryApi yandexDictionaryApi = new Retrofit.Builder()
-                .baseUrl(DictionaryApi.DICTIONARY_API_BASE_URL) //Базовая часть адреса
+                .baseUrl(DictionaryApi.DICTIONARY_API_BASE_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create(gson)) //Конвертер, необходимый для преобразования JSON'а в объекты
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build().create(YandexDictionaryApi.class);
-
 
         public static YandexDictionaryApi getDictionaryApi() {
             return yandexDictionaryApi;
         }
     }
 
+    /**
+     * Deserializer for Yandex Dictionary API for more comfortable work
+     * It gets only the necessary data
+     */
     private static class DictionaryDeserializer implements JsonDeserializer<Dictionary> {
         @Override
         public Dictionary deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {

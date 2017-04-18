@@ -61,6 +61,9 @@ public class SettingFragment extends Fragment implements ISettingFragment {
         return view;
     }
 
+    /**
+     * Init spinner adapter with string array res
+     */
     private void initSpinner() {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.vocalize_voices, android.R.layout.simple_spinner_item);
@@ -94,6 +97,7 @@ public class SettingFragment extends Fragment implements ISettingFragment {
             if (b) {
                 changeEditTextStyle(InputType.TYPE_CLASS_NUMBER, R.color.colorBlack);
             } else {
+                //if edit text in focus, keyboard visible, we need to hide it
                 hideKeyboard();
                 changeEditTextStyle(InputType.TYPE_NULL, R.color.colorUnselectedTab);
             }
@@ -139,6 +143,11 @@ public class SettingFragment extends Fragment implements ISettingFragment {
         setListeners();
     }
 
+    /**
+     * Changed color and edit text available
+     * @param inputType EditText input type (InputType const)
+     * @param colorId Color res id, for text view
+     */
     private void changeEditTextStyle(int inputType, @ColorRes int colorId) {
         mEtMillisecond.setInputType(inputType);
         mEtMillisecond.setTextColor(ResourcesCompat.getColor(getResources(),
@@ -149,6 +158,10 @@ public class SettingFragment extends Fragment implements ISettingFragment {
         mEtMillisecond.invalidate();
     }
 
+    /**
+     * Change edit text underline color
+     * @param disable if true set gray color
+     */
     private void setUnderlineDisableStyle(boolean disable) {
         if (disable) {
             mEtMillisecond.getBackground().setColorFilter(ResourcesCompat.getColor(getResources(),

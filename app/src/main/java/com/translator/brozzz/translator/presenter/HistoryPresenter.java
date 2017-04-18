@@ -18,14 +18,13 @@ public class HistoryPresenter implements IHistoryActionClickListener {
     public HistoryPresenter(Context context, boolean onlyFavorite) {
         mContext = context;
         isOnlyFavorite = onlyFavorite;
-        initRealm();
+        mRealm = Realm.getDefaultInstance();
         initRvAdapter();
     }
 
-    private void initRealm() {
-        mRealm = Realm.getDefaultInstance();
-    }
-
+    /**
+     * Init history Recycle View adapter
+     */
     private void initRvAdapter() {
         mRvHistoryAdapter = new HistoryRvAdapter(mContext,
                 null,
@@ -47,6 +46,9 @@ public class HistoryPresenter implements IHistoryActionClickListener {
         mRealm.commitTransaction();
     }
 
+    /**
+     * Delete recycle view adapter data from db
+     */
     public void clearRealmCollection() {
         if (mRvHistoryAdapter.getData() != null) {
             mRealm.beginTransaction();
@@ -60,11 +62,17 @@ public class HistoryPresenter implements IHistoryActionClickListener {
         }
     }
 
+    /**
+     * Freeing memory
+     */
     public void dismiss() {
         mRealm.close();
         mRvHistoryAdapter.updateData(null);
     }
 
+    /**
+     * Initialization of required fields
+     */
     public void init() {
         if (mRealm.isClosed()) {
             mRealm = Realm.getDefaultInstance();

@@ -84,6 +84,7 @@ public class PagerFragment extends Fragment implements TabLayout.OnTabSelectedLi
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
+        //change tab icon color
         if (isAdded()) {
             if (tab != null) {
                 if (tab.getIcon() != null) {
@@ -98,6 +99,7 @@ public class PagerFragment extends Fragment implements TabLayout.OnTabSelectedLi
 
     @Override
     public void onTabUnselected(TabLayout.Tab tab) {
+        //change tab icon color
         if (tab != null && tab.getIcon() != null) {
             tab.getIcon().mutate()
                     .setColorFilter(ResourcesCompat.getColor(getResources(),
