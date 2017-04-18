@@ -139,10 +139,8 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
     @Override
     public void onStop() {
         super.onStop();
-        if (!mDisposableChangeText.isDisposed()) {
+        if (!mDisposableChangeText.isDisposed())
             mDisposableChangeText.dispose();
-            mDisposableChangeText = null;
-        }
         mPresenter.dismiss();
     }
 

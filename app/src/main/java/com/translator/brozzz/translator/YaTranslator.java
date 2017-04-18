@@ -31,7 +31,7 @@ public class YaTranslator extends Application {
      */
     private void initDefaultSetting() {
         Realm realm = Realm.getDefaultInstance();
-        if (realm.where(SettingsModel.class).findFirst() == null){
+        if (realm.where(SettingsModel.class).findFirst() == null) {
             realm.beginTransaction();
             realm.copyToRealmOrUpdate(new SettingsModel());
             realm.commitTransaction();
