@@ -41,6 +41,6 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     compile 'io.realm:android-adapters:2.0.0'
     compile 'com.yandex.android:speechkit:2.5.0'
-
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     testCompile 'junit:junit:4.12'
 }

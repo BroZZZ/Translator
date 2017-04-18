@@ -269,10 +269,13 @@ public class TranslatePresenter {
 
     /**
      * return delay before auto-translate
-     *
      * @return delay before auto-translate
      */
     public int getDelayBeforeTranslate() {
         return mModel.getSettings().getDelayBeforeTranslate();
+    }
+
+    public boolean isTranslateOnFly(){
+        return mModel.getSettings().isTransleOnFlyOn();
     }
 }

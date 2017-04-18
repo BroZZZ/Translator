@@ -58,6 +58,16 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:src="@drawable/ic_mic_black_24dp" />
+
+                <ImageButton
+                    android:id="@+id/ib_translate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:background="@null"
+                    android:src="@drawable/ic_send_black_24dp" />
+
+
             </LinearLayout>
         </RelativeLayout>
 

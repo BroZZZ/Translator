@@ -3,6 +3,7 @@ package com.translator.brozzz.translator;
 import android.app.Application;
 import android.content.Context;
 
+import com.squareup.leakcanary.LeakCanary;
 import com.translator.brozzz.translator.model.SettingsModel;
 import com.translator.brozzz.translator.network.Yandex;
 
@@ -15,6 +16,7 @@ public class YaTranslator extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        LeakCanary.install(this);
         Realm.init(this);
         Realm.setDefaultConfiguration(new RealmConfiguration.Builder()
                 .deleteRealmIfMigrationNeeded()

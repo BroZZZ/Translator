@@ -53,6 +53,7 @@ public class SettingPresenter {
         mRealm.beginTransaction();
         mModel.setTransleOnFlyOn(b);
         mRealm.commitTransaction();
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Utils.Broadcast.ACTION_TRANSLATE_ON_FLY_CHANGED));
     }
 
     /**

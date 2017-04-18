@@ -36,6 +36,9 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
     @BindView(R.id.translate_text)
     EditText etOriginalText;
 
+    @BindView(R.id.ib_translate)
+    ImageButton ibTranslate;
+
     @BindView(R.id.translated_text)
     TextView tvTranslatedText;
 
@@ -96,44 +99,36 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
     public void onResume() {
         super.onResume();
         mPresenter.init();
-        mDisposableChangeText = RxTextView
-                .textChanges(etOriginalText)
-                .debounce(mPresenter.getDelayBeforeTranslate(), TimeUnit.MILLISECONDS)
-                .map(text -> text.toString().trim())
-                .observeOn(AndroidSchedulers.mainThread())
-                .filter(s ->
-                {
-                    if (s.isEmpty()) {
-                        clearText();
-                        mPresenter.getRvDictionaryAdapter().clear();
-                    }
-                    return !s.isEmpty();
-                })
-                .subscribe(mPresenter::translate);
+        initOriginalTextListener();
     }
 
     private void initOriginalTextListener() {
         if (mDisposableChangeText != null && !mDisposableChangeText.isDisposed())
             mDisposableChangeText.dispose();
+        if (mPresenter.isTranslateOnFly()) {
+            mDisposableChangeText = RxTextView
+                    .textChanges(etOriginalText)
+                    .debounce(mPresenter.getDelayBeforeTranslate(), TimeUnit.MILLISECONDS)
+                    .map(text -> text.toString().trim())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .filter(s ->
+                    {
+                        if (s.isEmpty()) {
+                            clearText();
+                            mPresenter.getRvDictionaryAdapter().clear();
+                        }
+                        return !s.isEmpty();
+                    })
+                    .subscribe(mPresenter::translate);
+            ibTranslate.setVisibility(View.GONE);
+        } else {
+            ibTranslate.setVisibility(View.VISIBLE);
+        }
 
-        mDisposableChangeText = RxTextView
-                .textChanges(etOriginalText)
-                .debounce(mPresenter.getDelayBeforeTranslate(), TimeUnit.MILLISECONDS)
-                .map(text -> text.toString().trim())
-                .observeOn(AndroidSchedulers.mainThread())
-                .filter(s ->
-                {
-                    if (s.isEmpty()) {
-                        clearText();
-                        mPresenter.getRvDictionaryAdapter().clear();
-                    }
-                    return !s.isEmpty();
-                })
-                .subscribe(mPresenter::translate);
     }
 
-    public void onTranslateOnFlyChanged(){
-
+    public void onTranslateOnFlyChanged() {
+        initOriginalTextListener();
     }
 
     @Override
@@ -231,6 +226,7 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
         ibVocalizeOrigin.setOnClickListener(view -> mPresenter.vocalize(etOriginalText.getText().toString(), ORIGINAL_TEXT));
         ibVocalizeTranslated.setOnClickListener(view -> mPresenter.vocalize(tvTranslatedText.getText().toString(), TRANSLATED_TEXT));
         ibRecognize.setOnClickListener(view -> mPresenter.startRecognizeInput());
+        ibTranslate.setOnClickListener(v -> mPresenter.translate(etOriginalText.getText().toString()));
     }
 
     /**
