@@ -65,7 +65,7 @@ public class SettingPresenter {
      */
     public void updateVoiceSetting(String voice) {
         mRealm.beginTransaction();
-        mModel.setVocalizeVoice(voice.toLowerCase());
+        mModel.setVocalizeVoice(voice);
         mRealm.commitTransaction();
     }
 

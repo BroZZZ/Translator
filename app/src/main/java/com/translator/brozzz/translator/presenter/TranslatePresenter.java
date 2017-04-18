@@ -120,11 +120,16 @@ public class TranslatePresenter {
      * @param textTypeId TranslateFragment const
      */
     public void vocalize(String text, int textTypeId) {
-        if (textTypeId == TranslateFragment.ORIGINAL_TEXT)
-            mSpeechkitHelper.Vocalize(text, mModel.getTranslateFrom(), textTypeId, mModel.getSettings().getVocalizeVoice());
-        else {
-            mSpeechkitHelper.Vocalize(text, mModel.getTranslateTo(), textTypeId, mModel.getSettings().getVocalizeVoice());
+        Utils.Lang language;
+        if (textTypeId == TranslateFragment.ORIGINAL_TEXT) {
+            language = mModel.getTranslateFrom();
+        } else {
+            language = mModel.getTranslateTo();
         }
+        mSpeechkitHelper.Vocalize(text,
+                language,
+                textTypeId,
+                mModel.getSettings().getVocalizeVoice().toLowerCase());
     }
 
     /**
@@ -189,7 +194,8 @@ public class TranslatePresenter {
                         case Utils.Broadcast.ACTION_TRANSLATE_ON_FLY_CHANGED:
                             mView.onTranslateOnFlyChanged();
                             break;
-                        default:break;
+                        default:
+                            break;
                     }
                 }
             };
@@ -269,13 +275,14 @@ public class TranslatePresenter {
 
     /**
      * return delay before auto-translate
+     *
      * @return delay before auto-translate
      */
     public int getDelayBeforeTranslate() {
         return mModel.getSettings().getDelayBeforeTranslate();
     }
 
-    public boolean isTranslateOnFly(){
+    public boolean isTranslateOnFly() {
         return mModel.getSettings().isTransleOnFlyOn();
     }
 }
