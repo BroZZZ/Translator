@@ -66,7 +66,6 @@ public class HistoryPresenter implements IHistoryActionClickListener {
      * Freeing memory
      */
     public void dismiss() {
-        mRealm.close();
         mRvHistoryAdapter.updateData(null);
     }
 

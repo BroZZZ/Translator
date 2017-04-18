@@ -14,6 +14,7 @@ public class Utils {
 
     public static class Broadcast{
         public static final String ACTION_DELAY_CHANGED = "com.translator.brozz.action.ACTION_DELAY_CHANGED";
+        public static final String ACTION_TRANSLATE_ON_FLY_CHANGED = "com.translator.brozz.action.TRANSLATE_ON_FLY_CHANGED";
     }
 
     /**

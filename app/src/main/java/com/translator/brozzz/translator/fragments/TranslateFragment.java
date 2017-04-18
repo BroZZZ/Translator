@@ -132,21 +132,22 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
                 .subscribe(mPresenter::translate);
     }
 
+    public void onTranslateOnFlyChanged(){
+
+    }
+
     @Override
     public void onDelayChanged() {
         initOriginalTextListener();
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        if (!mDisposableChangeText.isDisposed())
-            mDisposableChangeText.dispose();
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
+        if (!mDisposableChangeText.isDisposed()) {
+            mDisposableChangeText.dispose();
+            mDisposableChangeText = null;
+        }
         mPresenter.dismiss();
     }
 

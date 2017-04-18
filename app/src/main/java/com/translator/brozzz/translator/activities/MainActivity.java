@@ -10,8 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import com.translator.brozzz.translator.R;
 import com.translator.brozzz.translator.fragments.PagerFragment;
 
+import io.realm.Realm;
+
 public class MainActivity extends AppCompatActivity {
 
+    private Realm mRealmInstance = Realm.getDefaultInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,5 +35,11 @@ public class MainActivity extends AppCompatActivity {
             }
             ft.commit();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mRealmInstance.close();
     }
 }

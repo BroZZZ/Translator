@@ -47,4 +47,6 @@ public interface ITranslateFragment {
     void onVocalizationEnd(int textTypeId);
 
     void onDelayChanged();
+
+    void onTranslateOnFlyChanged();
 }

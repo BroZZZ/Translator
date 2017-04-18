@@ -53,6 +53,7 @@ public class TranslatePresenter {
 
     /**
      * get last translation languages from shared preferences
+     *
      * @param context
      */
     private void initModel(Context context) {
@@ -64,6 +65,7 @@ public class TranslatePresenter {
 
     /**
      * translate text from cache or yandex api
+     *
      * @param text
      */
     public void translate(String text) {
@@ -92,6 +94,7 @@ public class TranslatePresenter {
 
     /**
      * search text translation in realm db
+     *
      * @param text original text
      * @return translation info
      */
@@ -101,6 +104,7 @@ public class TranslatePresenter {
 
     /**
      * process translation and display on view
+     *
      * @param translationInfo processing object
      */
     private void processTranslation(TranslationInfo translationInfo) {
@@ -111,7 +115,8 @@ public class TranslatePresenter {
 
     /**
      * Vocalize text
-     * @param text vocalization text
+     *
+     * @param text       vocalization text
      * @param textTypeId TranslateFragment const
      */
     public void vocalize(String text, int textTypeId) {
@@ -124,6 +129,7 @@ public class TranslatePresenter {
 
     /**
      * Store translation info in db
+     *
      * @param translationInfo Saved object
      */
     private void storeTranslation(TranslationInfo translationInfo) {
@@ -158,7 +164,7 @@ public class TranslatePresenter {
     /**
      * Update setting from db
      */
-    private void updateSettings(){
+    private void updateSettings() {
         mModel.setSettings(mRealm.where(SettingsModel.class).findFirst());
     }
 
@@ -168,7 +174,6 @@ public class TranslatePresenter {
     private void dispose() {
         if (mDisposableTranslater != null && !mDisposableTranslater.isDisposed())
             mDisposableTranslater.dispose();
-        mRealm.close();
         unregisterReceiver();
     }
 
@@ -177,11 +182,20 @@ public class TranslatePresenter {
             mSettingReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    mView.onDelayChanged();
+                    switch (intent.getAction()) {
+                        case Utils.Broadcast.ACTION_DELAY_CHANGED:
+                            mView.onDelayChanged();
+                            break;
+                        case Utils.Broadcast.ACTION_TRANSLATE_ON_FLY_CHANGED:
+                            mView.onTranslateOnFlyChanged();
+                            break;
+                        default:break;
+                    }
                 }
             };
         }
         IntentFilter filter = new IntentFilter(Utils.Broadcast.ACTION_DELAY_CHANGED);
+        filter.addAction(Utils.Broadcast.ACTION_TRANSLATE_ON_FLY_CHANGED);
         LocalBroadcastManager.getInstance(mContext).registerReceiver(mSettingReceiver, filter);
     }
 
@@ -205,6 +219,7 @@ public class TranslatePresenter {
 
     /**
      * Set language format for yandex format
+     *
      * @return yandex api laguage param
      */
     private String getTranslationFormat() {
@@ -222,6 +237,7 @@ public class TranslatePresenter {
 
     /**
      * Get original language
+     *
      * @return string representation name
      */
     public String getTranslateFromName() {
@@ -230,6 +246,7 @@ public class TranslatePresenter {
 
     /**
      * Get translate language
+     *
      * @return string representation name
      */
     public String getTranslateToName() {
@@ -244,7 +261,7 @@ public class TranslatePresenter {
             Toast.makeText(mContext,
                     R.string.audio_record_error,
                     Toast.LENGTH_SHORT)
-            .show();
+                    .show();
             return;
         }
         mSpeechkitHelper.startRecognize(mModel.getTranslateFrom().getCode());
@@ -252,9 +269,10 @@ public class TranslatePresenter {
 
     /**
      * return delay before auto-translate
+     *
      * @return delay before auto-translate
      */
-    public int getDelayBeforeTranslate(){
+    public int getDelayBeforeTranslate() {
         return mModel.getSettings().getDelayBeforeTranslate();
     }
 }

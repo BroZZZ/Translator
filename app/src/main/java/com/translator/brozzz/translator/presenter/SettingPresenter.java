@@ -16,7 +16,6 @@ public class SettingPresenter {
     private ISettingFragment mView;
     private Context mContext;
     private Realm mRealm;
-    private LocalBroadcastManager mLocalBroadcastManager;
 
     public SettingPresenter(ISettingFragment view, Context context) {
         mView = view;
@@ -35,14 +34,15 @@ public class SettingPresenter {
     }
 
     /**
-     * Update delay before translate value in bd
+     * Update delay value in bd
      * @param delaySetting new value
      */
     public void updateDelaySetting(int delaySetting) {
         mRealm.beginTransaction();
         mModel.setDelayBeforeTranslate(delaySetting);
         mRealm.commitTransaction();
-        mContext.sendBroadcast(new Intent(Utils.Broadcast.ACTION_DELAY_CHANGED));
+        //send local broadcast for translate presenter, recreate rx listener for origin text
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Utils.Broadcast.ACTION_DELAY_CHANGED));
     }
 
     /**
@@ -66,13 +66,6 @@ public class SettingPresenter {
     }
 
     /**
-     * Freeing memory
-     */
-    public void dismiss() {
-        mRealm.close();
-    }
-
-    /**
      * Initialization of required fields
      */
     public void init() {
@@ -81,7 +74,6 @@ public class SettingPresenter {
             mModel = mRealm.where(SettingsModel.class).findFirst();
         }
         updateSettings();
-        mLocalBroadcastManager = LocalBroadcastManager.getInstance(mContext);
     }
 
 }

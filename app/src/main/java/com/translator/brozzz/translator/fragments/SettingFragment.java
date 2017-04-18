@@ -8,9 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.SwitchCompat;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +19,17 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.translator.brozzz.translator.R;
 import com.translator.brozzz.translator.interfaces.ISettingFragment;
 import com.translator.brozzz.translator.presenter.SettingPresenter;
 
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 
 public class SettingFragment extends Fragment implements ISettingFragment {
 
@@ -43,6 +46,8 @@ public class SettingFragment extends Fragment implements ISettingFragment {
     Spinner mSpinnerVoice;
 
     private SettingPresenter mPresenter;
+    private Disposable mDisposableDelayChanged;
+    private static final int DELAY_CHANGE_DEBOUNCE = 1000;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,24 +77,7 @@ public class SettingFragment extends Fragment implements ISettingFragment {
     }
 
     private void setListeners() {
-        mEtMillisecond.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                int delay = 0;
-                if (!editable.toString().isEmpty()) delay = Integer.parseInt(editable.toString());
-                mPresenter.updateDelaySetting(delay);
-            }
-        });
+        initDelayChangeListener();
         mSwitchTranslateOnFly.setOnCheckedChangeListener((compoundButton, b) ->
         {
             mPresenter.updateTranslateOnFlySetting(b);
@@ -117,6 +105,23 @@ public class SettingFragment extends Fragment implements ISettingFragment {
 
     }
 
+    private void initDelayChangeListener() {
+        if (mDisposableDelayChanged != null && !mDisposableDelayChanged.isDisposed())
+            mDisposableDelayChanged.dispose();
+
+        mDisposableDelayChanged = RxTextView
+                .textChanges(mEtMillisecond)
+                .debounce(DELAY_CHANGE_DEBOUNCE, TimeUnit.MILLISECONDS)
+                .map(CharSequence::toString)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(s ->
+                {
+                    int delay = 0;
+                    if (!s.isEmpty()) delay = Integer.parseInt(s);
+                    mPresenter.updateDelaySetting(delay);
+                });
+    }
+
     @Override
     public void updateSettingView(boolean isTranslateOnFlyOn, int delay, String Voice) {
         mSwitchTranslateOnFly.setChecked(isTranslateOnFlyOn);
@@ -133,7 +138,7 @@ public class SettingFragment extends Fragment implements ISettingFragment {
     @Override
     public void onStop() {
         super.onStop();
-        mPresenter.dismiss();
+        if (!mDisposableDelayChanged.isDisposed()) mDisposableDelayChanged.dispose();
     }
 
     @Override
@@ -145,8 +150,9 @@ public class SettingFragment extends Fragment implements ISettingFragment {
 
     /**
      * Changed color and edit text available
+     *
      * @param inputType EditText input type (InputType const)
-     * @param colorId Color res id, for text view
+     * @param colorId   Color res id, for text view
      */
     private void changeEditTextStyle(int inputType, @ColorRes int colorId) {
         mEtMillisecond.setInputType(inputType);
@@ -160,6 +166,7 @@ public class SettingFragment extends Fragment implements ISettingFragment {
 
     /**
      * Change edit text underline color
+     *
      * @param disable if true set gray color
      */
     private void setUnderlineDisableStyle(boolean disable) {
