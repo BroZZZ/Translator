@@ -32,12 +32,10 @@ public class TranslatePresenter {
     private YandexDictionaryApi mDictionaryApi = Yandex.DictionaryApi.getDictionaryApi();
     private ITranslateFragment mView;
     private TranslateModel mModel;
-    private SettingsModel mSettingsModel;
     private DictionaryRvAdapter mRvDictionaryAdapter;
     private Context mContext;
     private Realm mRealm;
     private SpeechkitHelper mSpeechkitHelper;
-
     private Disposable mDisposableTranslater;
 
     public TranslatePresenter(Context context, ITranslateFragment fragmentView) {
@@ -56,7 +54,7 @@ public class TranslatePresenter {
         SharedPreferences mSettings = context.getSharedPreferences(Utils.SharedPreferences.TRANSLATE_PREFERENCES, Context.MODE_PRIVATE);
         String translateFromSetting = mSettings.getString(Utils.SharedPreferences.TRANSLATE_FROM_PREFERENCE, "");
         String translateToSetting = mSettings.getString(Utils.SharedPreferences.TRANSLATE_TO_PREFERENCE, "");
-        mModel = new TranslateModel(translateFromSetting, translateToSetting, mRealm.where(SettingsModel.class).findFirst());
+        mModel = new TranslateModel(translateFromSetting, translateToSetting);
     }
 
     /**
@@ -113,9 +111,9 @@ public class TranslatePresenter {
      */
     public void vocalize(String text, int textTypeId) {
         if (textTypeId == TranslateFragment.ORIGINAL_TEXT)
-            mSpeechkitHelper.Vocalize(text, mModel.getTranslateFrom(), textTypeId, mSettingsModel.getVocalizeVoice());
+            mSpeechkitHelper.Vocalize(text, mModel.getTranslateFrom(), textTypeId, mModel.getSettings().getVocalizeVoice());
         else {
-            mSpeechkitHelper.Vocalize(text, mModel.getTranslateTo(), textTypeId, mSettingsModel.getVocalizeVoice());
+            mSpeechkitHelper.Vocalize(text, mModel.getTranslateTo(), textTypeId, mModel.getSettings().getVocalizeVoice());
         }
     }
 
@@ -155,7 +153,7 @@ public class TranslatePresenter {
      * Update setting from db
      */
     private void updateSettings(){
-        mSettingsModel = mRealm.where(SettingsModel.class).findFirst();
+        mModel.setSettings(mRealm.where(SettingsModel.class).findFirst());
     }
 
     /**

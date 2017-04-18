@@ -8,7 +8,7 @@ public class TranslateModel {
     private Utils.Lang mTranslateTo;
     private SettingsModel mSettings;
 
-    public TranslateModel(String translateFrom, String translateTo, SettingsModel settings) {
+    public TranslateModel(String translateFrom, String translateTo) {
         if (!translateFrom.isEmpty() && !translateTo.isEmpty()) {
             mTranslateFrom = Utils.Lang.valueOf(translateFrom);
             mTranslateTo = Utils.Lang.valueOf(translateTo);
@@ -16,7 +16,14 @@ public class TranslateModel {
             mTranslateFrom = Utils.Lang.EN;
             mTranslateTo = Utils.Lang.RU;
         }
-        mSettings = settings;
+    }
+
+    public SettingsModel getSettings(){
+        return mSettings;
+    }
+
+    public void setSettings(SettingsModel mSettings) {
+        this.mSettings = mSettings;
     }
 
     public void switchLang() {
@@ -33,7 +40,4 @@ public class TranslateModel {
         return mTranslateTo;
     }
 
-    public SettingsModel getSettings(){
-        return mSettings;
-    }
 }
