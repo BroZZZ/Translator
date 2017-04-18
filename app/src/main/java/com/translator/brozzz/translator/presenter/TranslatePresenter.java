@@ -215,6 +215,10 @@ public class TranslatePresenter {
      */
     public void startRecognizeInput() {
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(mContext,
+                    R.string.audio_record_error,
+                    Toast.LENGTH_SHORT)
+            .show();
             return;
         }
         mSpeechkitHelper.startRecognize(mModel.getTranslateFrom().getCode());

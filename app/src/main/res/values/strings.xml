@@ -4,11 +4,12 @@
     <string name="vocalize_voice">Vocalize voice:</string>
     <string name="delay_for_auto_translate">Delay for auto-translate (millis)</string>
     <string name="translate_on_fly">Translate on fly</string>
-    <string name="teststring">testString</string>
+    <string name="test_string">testString</string>
     <string name="history_title">History</string>
     <string name="favorite_title">Favorite</string>
     <string name="write_your_text_here">write your text here</string>
     <string name="settings">Settings</string>
+    <string name="audio_record_error">Record audio record permission not granted. Please grant audio record permission and try again.</string>
 
     <string-array name="vocalize_voices">
         <item>Alyss</item>

@@ -28,7 +28,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="5dp"
-            android:text="@string/teststring"
+            android:text="@string/test_string"
             android:textColor="@color/colorUnselectedTab"
             android:textSize="12sp" />
 
@@ -46,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:text="@string/teststring"
+                android:text="@string/test_string"
                 android:textSize="12sp" />
 
             <TextView
@@ -54,7 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:text="@string/teststring"
+                android:text="@string/test_string"
                 android:textColor="@android:color/holo_orange_dark"
                 android:textSize="12sp" />
 
