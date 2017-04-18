@@ -35,6 +35,7 @@ public class SettingPresenter {
 
     /**
      * Update delay value in bd
+     *
      * @param delaySetting new value
      */
     public void updateDelaySetting(int delaySetting) {
@@ -47,6 +48,7 @@ public class SettingPresenter {
 
     /**
      * Update translate on fly value in bd
+     *
      * @param b new value
      */
     public void updateTranslateOnFlySetting(boolean b) {
@@ -58,11 +60,12 @@ public class SettingPresenter {
 
     /**
      * Update vocalization voice value in bd
+     *
      * @param voice new value
      */
     public void updateVoiceSetting(String voice) {
         mRealm.beginTransaction();
-        mModel.setVocalizeVoice(voice);
+        mModel.setVocalizeVoice(voice.toLowerCase());
         mRealm.commitTransaction();
     }
 

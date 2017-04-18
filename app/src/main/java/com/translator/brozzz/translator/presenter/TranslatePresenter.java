@@ -108,9 +108,9 @@ public class TranslatePresenter {
      * @param translationInfo processing object
      */
     private void processTranslation(TranslationInfo translationInfo) {
+        mRvDictionaryAdapter.setDictionary(translationInfo.getDictionary());
         storeTranslation(translationInfo);
         mView.displayTranslateResult(translationInfo.getOriginalText(), translationInfo.getTranslation().getTranslatedText());
-        mRvDictionaryAdapter.setDictionary(translationInfo.getDictionary());
     }
 
     /**

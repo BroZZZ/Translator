@@ -1,5 +1,10 @@
 package com.translator.brozzz.translator.utils;
 
+import android.app.Activity;
+import android.content.Context;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+
 public class Utils {
 
     public static class SharedPreferences {
@@ -39,6 +44,16 @@ public class Utils {
         public String getName() {
             return mName;
         }
+    }
+
+    /**
+     * hide keyboard
+     * @param activity activity for get input service
+     * @param focusableView view with focus
+     */
+    public static void hideKeyboard(Activity activity, View focusableView) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(focusableView.getWindowToken(), 0);
     }
 
 }

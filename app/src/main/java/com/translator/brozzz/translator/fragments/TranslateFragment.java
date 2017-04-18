@@ -2,7 +2,7 @@ package com.translator.brozzz.translator.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,7 +17,9 @@ import android.widget.TextView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.translator.brozzz.translator.R;
 import com.translator.brozzz.translator.interfaces.ITranslateFragment;
+import com.translator.brozzz.translator.interfaces.TabFragment;
 import com.translator.brozzz.translator.presenter.TranslatePresenter;
+import com.translator.brozzz.translator.utils.Utils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -28,7 +30,7 @@ import io.reactivex.disposables.Disposable;
 
 import static com.translator.brozzz.translator.R.id.ib_favorite;
 
-public class TranslateFragment extends Fragment implements ITranslateFragment {
+public class TranslateFragment extends TabFragment implements ITranslateFragment {
 
     public static final int ORIGINAL_TEXT = 0;
     public static final int TRANSLATED_TEXT = 1;
@@ -102,34 +104,7 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
         initOriginalTextListener();
     }
 
-    private void initOriginalTextListener() {
-        if (mDisposableChangeText != null && !mDisposableChangeText.isDisposed())
-            mDisposableChangeText.dispose();
-        if (mPresenter.isTranslateOnFly()) {
-            mDisposableChangeText = RxTextView
-                    .textChanges(etOriginalText)
-                    .debounce(mPresenter.getDelayBeforeTranslate(), TimeUnit.MILLISECONDS)
-                    .map(text -> text.toString().trim())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .filter(s ->
-                    {
-                        if (s.isEmpty()) {
-                            clearText();
-                            mPresenter.getRvDictionaryAdapter().clear();
-                        }
-                        return !s.isEmpty();
-                    })
-                    .subscribe(mPresenter::translate);
-            ibTranslate.setVisibility(View.GONE);
-        } else {
-            ibTranslate.setVisibility(View.VISIBLE);
-        }
 
-    }
-
-    public void onTranslateOnFlyChanged() {
-        initOriginalTextListener();
-    }
 
     @Override
     public void onDelayChanged() {
@@ -139,7 +114,7 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
     @Override
     public void onStop() {
         super.onStop();
-        if (!mDisposableChangeText.isDisposed())
+        if (mDisposableChangeText != null && !mDisposableChangeText.isDisposed())
             mDisposableChangeText.dispose();
         mPresenter.dismiss();
     }
@@ -211,6 +186,50 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
             ibVocalizeOrigin.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorBlack));
         else
             ibVocalizeTranslated.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorBlack));
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+        Utils.hideKeyboard(getActivity(),etOriginalText);
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
+    }
+
+    private void initOriginalTextListener() {
+        if (mDisposableChangeText != null && !mDisposableChangeText.isDisposed())
+            mDisposableChangeText.dispose();
+        if (mPresenter.isTranslateOnFly()) {
+            mDisposableChangeText = RxTextView
+                    .textChanges(etOriginalText)
+                    .debounce(mPresenter.getDelayBeforeTranslate(), TimeUnit.MILLISECONDS)
+                    .map(text -> text.toString().trim())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .filter(s ->
+                    {
+                        if (s.isEmpty()) {
+                            clearText();
+                            mPresenter.getRvDictionaryAdapter().clear();
+                        }
+                        return !s.isEmpty();
+                    })
+                    .subscribe(mPresenter::translate);
+            ibTranslate.setVisibility(View.GONE);
+        } else {
+            ibTranslate.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    public void onTranslateOnFlyChanged() {
+        initOriginalTextListener();
     }
 
     private void initRv() {

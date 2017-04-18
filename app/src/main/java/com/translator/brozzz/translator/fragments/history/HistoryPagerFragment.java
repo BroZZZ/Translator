@@ -3,7 +3,6 @@ package com.translator.brozzz.translator.fragments.history;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +11,13 @@ import android.widget.ImageView;
 
 import com.translator.brozzz.translator.R;
 import com.translator.brozzz.translator.adapters.HistoryTabPagerAdapter;
+import com.translator.brozzz.translator.interfaces.TabFragment;
 import com.translator.brozzz.translator.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class HistoryPagerFragment extends Fragment implements TabLayout.OnTabSelectedListener {
+public class HistoryPagerFragment extends TabFragment  {
 
     @BindView(R.id.view_pager)
     ViewPager viewPager;
@@ -51,6 +51,18 @@ public class HistoryPagerFragment extends Fragment implements TabLayout.OnTabSel
         return view;
     }
 
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {;
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+    }
+
     private void initViewPager() {
         if (historyTabPagerAdapter == null) {
 
@@ -72,17 +84,5 @@ public class HistoryPagerFragment extends Fragment implements TabLayout.OnTabSel
         mTabLayout.getTabAt(0).setText(getString(R.string.history_title));
         mTabLayout.getTabAt(1).setText(getString(R.string.favorite_title));
         onTabSelected(mTabLayout.getTabAt(0));
-    }
-
-    @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-    }
-
-    @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-    }
-
-    @Override
-    public void onTabReselected(TabLayout.Tab tab) {
     }
 }

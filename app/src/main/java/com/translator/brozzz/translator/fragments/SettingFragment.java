@@ -1,18 +1,16 @@
 package com.translator.brozzz.translator.fragments;
 
-import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.design.widget.TabLayout;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -22,7 +20,9 @@ import android.widget.TextView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.translator.brozzz.translator.R;
 import com.translator.brozzz.translator.interfaces.ISettingFragment;
+import com.translator.brozzz.translator.interfaces.TabFragment;
 import com.translator.brozzz.translator.presenter.SettingPresenter;
+import com.translator.brozzz.translator.utils.Utils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -31,10 +31,10 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
-public class SettingFragment extends Fragment implements ISettingFragment {
+public class SettingFragment extends TabFragment implements ISettingFragment {
 
     @BindView(R.id.et_millisecond)
-    EditText mEtMillisecond;
+    EditText mEtDelay;
 
     @BindView(R.id.sc_trastale_on_fly)
     SwitchCompat mSwitchTranslateOnFly;
@@ -66,6 +66,64 @@ public class SettingFragment extends Fragment implements ISettingFragment {
         return view;
     }
 
+    @Override
+    public void updateSettingView(boolean isTranslateOnFlyOn, int delay, String Voice) {
+        mSwitchTranslateOnFly.setChecked(isTranslateOnFlyOn);
+        mEtDelay.setText(String.valueOf(delay));
+        mSpinnerVoice.setSelection(((ArrayAdapter) mSpinnerVoice.getAdapter()).getPosition(Voice));
+        if (isTranslateOnFlyOn) {
+            changeEditTextStyle(InputType.TYPE_CLASS_NUMBER, R.color.colorBlack);
+        } else {
+            Utils.hideKeyboard(getActivity(), mEtDelay);
+            changeEditTextStyle(InputType.TYPE_NULL, R.color.colorUnselectedTab);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (!mDisposableDelayChanged.isDisposed()) mDisposableDelayChanged.dispose();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.init();
+        setListeners();
+    }
+
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+        Utils.hideKeyboard(getActivity(), mEtDelay);
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
+    }
+
+    /**
+     * Changed color and edit text available
+     *
+     * @param inputType EditText input type (InputType const)
+     * @param colorId   Color res id, for text view
+     */
+    private void changeEditTextStyle(int inputType, @ColorRes int colorId) {
+        mEtDelay.setInputType(inputType);
+        mEtDelay.setTextColor(ResourcesCompat.getColor(getResources(),
+                colorId, getContext().getTheme()));
+        mTvDelayText.setTextColor(ResourcesCompat.getColor(getResources(),
+                colorId, getContext().getTheme()));
+        setUnderlineDisableStyle(inputType == InputType.TYPE_NULL);
+        mEtDelay.invalidate();
+    }
+
     /**
      * Init spinner adapter with string array res
      */
@@ -81,12 +139,12 @@ public class SettingFragment extends Fragment implements ISettingFragment {
         mSwitchTranslateOnFly.setOnCheckedChangeListener((compoundButton, b) ->
         {
             mPresenter.updateTranslateOnFlySetting(b);
-            mEtMillisecond.clearFocus();
+            mEtDelay.clearFocus();
             if (b) {
                 changeEditTextStyle(InputType.TYPE_CLASS_NUMBER, R.color.colorBlack);
             } else {
                 //if edit text in focus, keyboard visible, we need to hide it
-                hideKeyboard();
+                Utils.hideKeyboard(getActivity(), mEtDelay);
                 changeEditTextStyle(InputType.TYPE_NULL, R.color.colorUnselectedTab);
             }
 
@@ -110,7 +168,7 @@ public class SettingFragment extends Fragment implements ISettingFragment {
             mDisposableDelayChanged.dispose();
 
         mDisposableDelayChanged = RxTextView
-                .textChanges(mEtMillisecond)
+                .textChanges(mEtDelay)
                 .debounce(DELAY_CHANGE_DEBOUNCE, TimeUnit.MILLISECONDS)
                 .map(CharSequence::toString)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -122,48 +180,6 @@ public class SettingFragment extends Fragment implements ISettingFragment {
                 });
     }
 
-    @Override
-    public void updateSettingView(boolean isTranslateOnFlyOn, int delay, String Voice) {
-        mSwitchTranslateOnFly.setChecked(isTranslateOnFlyOn);
-        mEtMillisecond.setText(String.valueOf(delay));
-        mSpinnerVoice.setSelection(((ArrayAdapter) mSpinnerVoice.getAdapter()).getPosition(Voice));
-        if (isTranslateOnFlyOn) {
-            changeEditTextStyle(InputType.TYPE_CLASS_NUMBER, R.color.colorBlack);
-        } else {
-            hideKeyboard();
-            changeEditTextStyle(InputType.TYPE_NULL, R.color.colorUnselectedTab);
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (!mDisposableDelayChanged.isDisposed()) mDisposableDelayChanged.dispose();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.init();
-        setListeners();
-    }
-
-    /**
-     * Changed color and edit text available
-     *
-     * @param inputType EditText input type (InputType const)
-     * @param colorId   Color res id, for text view
-     */
-    private void changeEditTextStyle(int inputType, @ColorRes int colorId) {
-        mEtMillisecond.setInputType(inputType);
-        mEtMillisecond.setTextColor(ResourcesCompat.getColor(getResources(),
-                colorId, getContext().getTheme()));
-        mTvDelayText.setTextColor(ResourcesCompat.getColor(getResources(),
-                colorId, getContext().getTheme()));
-        setUnderlineDisableStyle(inputType == InputType.TYPE_NULL);
-        mEtMillisecond.invalidate();
-    }
-
     /**
      * Change edit text underline color
      *
@@ -171,16 +187,13 @@ public class SettingFragment extends Fragment implements ISettingFragment {
      */
     private void setUnderlineDisableStyle(boolean disable) {
         if (disable) {
-            mEtMillisecond.getBackground().setColorFilter(ResourcesCompat.getColor(getResources(),
+            mEtDelay.getBackground().setColorFilter(ResourcesCompat.getColor(getResources(),
                     R.color.colorUnselectedTab, getContext().getTheme()), PorterDuff.Mode.SRC_IN);
         } else {
-            mEtMillisecond.getBackground().clearColorFilter();
+            mEtDelay.getBackground().clearColorFilter();
         }
 
     }
 
-    private void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mEtMillisecond.getWindowToken(), 0);
-    }
+
 }

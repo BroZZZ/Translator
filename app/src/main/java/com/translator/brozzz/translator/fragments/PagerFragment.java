@@ -105,6 +105,7 @@ public class PagerFragment extends Fragment implements TabLayout.OnTabSelectedLi
                     .setColorFilter(ResourcesCompat.getColor(getResources(),
                             R.color.colorUnselectedTab, getContext().getTheme()),
                             PorterDuff.Mode.MULTIPLY);
+            mainPagerAdapter.getItem(tab).onTabUnselected(tab);
         }
     }
 
