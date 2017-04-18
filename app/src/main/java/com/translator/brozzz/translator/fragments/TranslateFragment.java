@@ -112,6 +112,31 @@ public class TranslateFragment extends Fragment implements ITranslateFragment {
                 .subscribe(mPresenter::translate);
     }
 
+    private void initOriginalTextListener() {
+        if (mDisposableChangeText != null && !mDisposableChangeText.isDisposed())
+            mDisposableChangeText.dispose();
+
+        mDisposableChangeText = RxTextView
+                .textChanges(etOriginalText)
+                .debounce(mPresenter.getDelayBeforeTranslate(), TimeUnit.MILLISECONDS)
+                .map(text -> text.toString().trim())
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter(s ->
+                {
+                    if (s.isEmpty()) {
+                        clearText();
+                        mPresenter.getRvDictionaryAdapter().clear();
+                    }
+                    return !s.isEmpty();
+                })
+                .subscribe(mPresenter::translate);
+    }
+
+    @Override
+    public void onDelayChanged() {
+        initOriginalTextListener();
+    }
+
     @Override
     public void onPause() {
         super.onPause();

@@ -47,7 +47,7 @@ public class SettingFragment extends Fragment implements ISettingFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPresenter = new SettingPresenter(this);
+        mPresenter = new SettingPresenter(this, getContext());
     }
 
     @Nullable

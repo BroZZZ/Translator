@@ -1,10 +1,14 @@
 package com.translator.brozzz.translator.presenter;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 
 import com.translator.brozzz.translator.R;
@@ -37,6 +41,7 @@ public class TranslatePresenter {
     private Realm mRealm;
     private SpeechkitHelper mSpeechkitHelper;
     private Disposable mDisposableTranslater;
+    private BroadcastReceiver mSettingReceiver;
 
     public TranslatePresenter(Context context, ITranslateFragment fragmentView) {
         mView = fragmentView;
@@ -146,6 +151,7 @@ public class TranslatePresenter {
     public void init() {
         if (mRealm.isClosed()) mRealm = Realm.getDefaultInstance();
         mSpeechkitHelper = new SpeechkitHelper(mView);
+        registerReceiver();
         updateSettings();
     }
 
@@ -162,6 +168,28 @@ public class TranslatePresenter {
     private void dispose() {
         if (mDisposableTranslater != null && !mDisposableTranslater.isDisposed())
             mDisposableTranslater.dispose();
+        mRealm.close();
+        unregisterReceiver();
+    }
+
+    private void registerReceiver() {
+        if (mSettingReceiver == null) {
+            mSettingReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    mView.onDelayChanged();
+                }
+            };
+        }
+        IntentFilter filter = new IntentFilter(Utils.Broadcast.ACTION_DELAY_CHANGED);
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(mSettingReceiver, filter);
+    }
+
+    /**
+     * Unregister setting broadcast receiver
+     */
+    private void unregisterReceiver() {
+        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mSettingReceiver);
     }
 
     /**

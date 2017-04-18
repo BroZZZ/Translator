@@ -1,7 +1,12 @@
 package com.translator.brozzz.translator.presenter;
 
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
+
 import com.translator.brozzz.translator.interfaces.ISettingFragment;
 import com.translator.brozzz.translator.model.SettingsModel;
+import com.translator.brozzz.translator.utils.Utils;
 
 import io.realm.Realm;
 
@@ -9,10 +14,13 @@ import io.realm.Realm;
 public class SettingPresenter {
     private SettingsModel mModel;
     private ISettingFragment mView;
+    private Context mContext;
     private Realm mRealm;
+    private LocalBroadcastManager mLocalBroadcastManager;
 
-    public SettingPresenter(ISettingFragment view) {
+    public SettingPresenter(ISettingFragment view, Context context) {
         mView = view;
+        mContext = context;
         mRealm = Realm.getDefaultInstance();
         mModel = mRealm.where(SettingsModel.class).findFirst();
     }
@@ -34,6 +42,7 @@ public class SettingPresenter {
         mRealm.beginTransaction();
         mModel.setDelayBeforeTranslate(delaySetting);
         mRealm.commitTransaction();
+        mContext.sendBroadcast(new Intent(Utils.Broadcast.ACTION_DELAY_CHANGED));
     }
 
     /**
@@ -72,6 +81,7 @@ public class SettingPresenter {
             mModel = mRealm.where(SettingsModel.class).findFirst();
         }
         updateSettings();
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(mContext);
     }
 
 }

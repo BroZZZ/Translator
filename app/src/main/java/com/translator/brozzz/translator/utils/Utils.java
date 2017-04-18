@@ -12,6 +12,10 @@ public class Utils {
         public static final String FAVORITE_ONLY = "com.translator.brozz.extra.FAVORITE_ONLY";
     }
 
+    public static class Broadcast{
+        public static final String ACTION_DELAY_CHANGED = "com.translator.brozz.action.ACTION_DELAY_CHANGED";
+    }
+
     /**
      * Standard suitable languages
      */
