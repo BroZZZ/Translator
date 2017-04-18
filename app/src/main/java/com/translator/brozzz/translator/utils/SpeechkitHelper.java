@@ -22,22 +22,35 @@ public class SpeechkitHelper implements RecognizerListener, VocalizerListener {
         mDestinationView = destinationView;
     }
 
+    /**
+     * Start text vocalization
+     * @param text Vocalization text
+     * @param language Vocalization laguage
+     * @param textTypeId Text type (TranslateFragment const)
+     * @param voice Vocalization voice
+     */
     public void Vocalize(String text, Utils.Lang language, int textTypeId, String voice) {
-
         dismiss();
-
         this.textTypeId = textTypeId;
         vocalizer = Vocalizer.createVocalizer(language.getCode(), text, true, voice);
         vocalizer.setListener(this);
         vocalizer.start();
     }
 
+    /**
+     * Start voice recognize
+     * @param language Recognition language
+     * @throws SecurityException
+     */
     public void startRecognize(String language) throws SecurityException {
         dismiss();
         recognizer = Recognizer.create(language, Recognizer.Model.NOTES, this, false);
         recognizer.start();
     }
 
+    /**
+     * Freeing memory, stoping vocalization and recognize if they started
+     */
     public void dismiss() {
         if (vocalizer != null) {
             if (mIsVocalizeNow) {
